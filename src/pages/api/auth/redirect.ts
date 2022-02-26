@@ -1,6 +1,6 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { getUserInfo } from '../../../lib/google-api/auth';
+import { createUser } from '../../../lib/google-api/auth';
 
 /**
  * This is the endpoint google sign-in redirects to
@@ -10,12 +10,19 @@ import { getUserInfo } from '../../../lib/google-api/auth';
  * Returned values are: email address, username, profile image (and basically anything that is publicly available)
  */
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-    const { code, scope, error } = req.query;
+    const { code, error } = req.query;
 
-    if (code) {
-        const data = await getUserInfo(typeof code == 'string' ? code : code[0]);
-        console.log(data);
+    if (!code) {
+        res.send(`Code or scope missing from redirect. ${error ?? ''}`);
+        return;
     }
 
-    res.status(200).send('OK');
+    const { ok, id } = await createUser(typeof code == 'string' ? code : code[0]);
+
+    if (!ok) {
+        res.send('Failed to log in');
+        return;
+    }
+
+    res.status(200).send(`OK - ${id}`);
 }
