@@ -1,5 +1,5 @@
 import { NextPageContext } from 'next';
-import AddEvent from '../../lib/components/AddEvent';
+import EventEditor from '../../lib/components/EventEditor';
 import { getID } from '../api/auth/token';
 
 const homePageRedirect = {
@@ -34,9 +34,8 @@ const xd = {
 
 const DashBoard = (props: any) => {
     return (
-        <div className='flex justify-center items-center h-screen'>
-            <i className='fa-solid fa-wheelchair'></i>
-            <AddEvent mode='edit' values={xd} />
+        <div>
+            <EventEditor mode='edit' values={xd} />
         </div>
     );
 };
