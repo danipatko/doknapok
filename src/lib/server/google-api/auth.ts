@@ -1,8 +1,9 @@
-import { withUser } from '../database/redis';
+import { withAdmin, withUser } from '../database/redis';
 import { getClass } from '../util';
 
 // Restrict allowed login domains to this specific one (leave undefined to accept all)
 const RESTRICT_DOMAIN: string | undefined = 'szlgbp.hu';
+const ADMIN_EMAILS: string[] = ['patko.daniel.19f@szlgbp.hu'];
 
 /**
  * Step 2 of the authentication flow
@@ -81,7 +82,7 @@ const fetchUserInfo = async (creds: {
  * Create a new user account or find existing one from authorization code
  * @returns if ok is true, the id of the account otherwise the error message
  */
-export const createUser = async (code: string): Promise<{ ok: boolean; id: string }> => {
+export const createUser = async (code: string): Promise<{ ok: boolean; id: string; admin?: boolean }> => {
     const creds = await fetchAccessToken(code);
     if (!creds) return { ok: false, id: 'Failed to fetch access token' };
 
@@ -92,15 +93,31 @@ export const createUser = async (code: string): Promise<{ ok: boolean; id: strin
         return { ok: false, id: `Error: given e-mail address domain (${data.hd}) does not match '${RESTRICT_DOMAIN}'` };
 
     // TODO: check if email belongs to a teacher
+    if (ADMIN_EMAILS.includes(data.email))
+        return await withAdmin(async (repo): Promise<{ ok: boolean; id: string; admin?: boolean }> => {
+            await repo.createIndex();
+
+            const user = await repo.search().where('email').equals(data.email).returnFirst();
+            if (user !== null) return { ok: true, id: user.entityId, admin: true };
+
+            const en = repo.createEntity({
+                name: data.name,
+                email: data.email,
+                picture: data.picture,
+            });
+
+            const id = await repo.save(en);
+
+            return { ok: true, id, admin: true };
+        });
 
     // create user
-    return await withUser(async (repo): Promise<{ ok: boolean; id: string }> => {
+    return await withUser(async (repo): Promise<{ ok: boolean; id: string; admin?: boolean }> => {
         // 01FWVFEEX1JF1FWPKNPZAHFF7T
         await repo.createIndex();
         // check if user already exists
         const user = await repo.search().where('email').equals(data.email).returnFirst();
-        console.log(user);
-        if (user !== null) return { ok: true, id: user.entityId };
+        if (user !== null) return { ok: true, id: user.entityId, admin: false };
 
         const en = repo.createEntity({
             name: data.name,
@@ -116,6 +133,6 @@ export const createUser = async (code: string): Promise<{ ok: boolean; id: strin
         const id = await repo.save(en);
 
         // else create record in database
-        return { ok: true, id };
+        return { ok: true, id, admin: false };
     });
 };

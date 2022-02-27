@@ -12,7 +12,7 @@ const useUser = () => {
 
             const data = await reponse.json();
 
-            setState(data as { name: string; picture: string; class: string });
+            setState(Object.keys(data).length ? (data as { name: string; picture: string; class: string }) : null);
         });
     }, [setState]);
 

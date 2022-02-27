@@ -1,13 +1,13 @@
 import { Schema, Entity, Repository, Client } from 'redis-om';
 
 // Note: in docker compose, this value may be 'redis://redis:6379'
-// TODO: put this in dotenv
-const REDIS_URL = 'redis://127.0.0.1:6379';
+const REDIS_URL = process.env.DB_HOST ?? 'redis://127.0.0.1:6379';
 
 const client = new Client();
 
 export class UserEntity extends Entity {}
 export class IEventEntity extends Entity {}
+export class AdminEntity extends Entity {}
 
 const userSchema = new Schema(UserEntity, {
     name: { type: 'string' },
@@ -30,7 +30,11 @@ const ieventSchema = new Schema(IEventEntity, {
     occupied: { type: 'number' },
 });
 
-const sleep = (ms: number) => new Promise<void>((res) => setTimeout(res, ms));
+const adminSchema = new Schema(AdminEntity, {
+    name: { type: 'string' },
+    email: { type: 'string' },
+    picture: { type: 'string' },
+});
 
 /**
  * Try to connect to redis server specified in `REDIS_URL`
@@ -45,7 +49,7 @@ export const connect = async (): Promise<void> => {
 /**
  * Drop every key in the database
  */
-export const flushAll = async () => {
+export const flushAll = async (): Promise<void> => {
     await connect();
     await client.execute(['FLUSHALL']);
 };
@@ -68,4 +72,14 @@ export const withUser = async <Type>(callback: (repo: Repository<UserEntity>) =>
 export const withEvent = async <Type>(callback: (repo: Repository<IEventEntity>) => Promise<Type>): Promise<Type> => {
     await connect();
     return await callback(client.fetchRepository<IEventEntity>(ieventSchema));
+};
+
+/**
+ * Wrapper to make connection checking easier with a simple callback
+ * @param callback: function with the adminRepositroy as a parameter
+ * @returns the generic type assigned to the callback function
+ */
+export const withAdmin = async <Type>(callback: (repo: Repository<AdminEntity>) => Promise<Type>): Promise<Type> => {
+    await connect();
+    return await callback(client.fetchRepository<AdminEntity>(adminSchema));
 };

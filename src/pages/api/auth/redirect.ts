@@ -17,14 +17,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return;
     }
 
-    const { ok, id } = await createUser(typeof code == 'string' ? code : code[0]);
+    const { ok, id, admin } = await createUser(typeof code == 'string' ? code : code[0]);
 
     if (!ok) {
         res.send(`Failed to log in\n${id}`);
         return;
     }
 
-    setID(id, req, res);
+    setID(id, admin ? true : false, req, res);
 
     res.status(200).send(`OK - ${id}`);
 }

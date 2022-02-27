@@ -1,4 +1,4 @@
-import useUser from '../front/user';
+import useUser from '../hooks/user';
 
 const Layout = (props: any) => {
     const user = useUser();
