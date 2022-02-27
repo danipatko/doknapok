@@ -97,6 +97,7 @@ export const createUser = async (code: string): Promise<{ ok: boolean; id: strin
         // 01FWVFEEX1JF1FWPKNPZAHFF7T
         await repo.createIndex();
         const admin = ADMIN_EMAILS.includes(data.email);
+
         // check if user already exists
         const user = await repo.search().where('email').equals(data.email).and('admin').eq(admin).returnFirst();
         if (user !== null) return { ok: true, id: user.entityId, admin };
