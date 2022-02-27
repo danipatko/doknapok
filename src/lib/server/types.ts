@@ -3,6 +3,7 @@ export type User = {
     name: string;
     email: string;
     class: string;
+    admin: boolean;
     event_1_enrolled: Date;
     event_1_id: string;
     event_2_enrolled: Date;
@@ -18,4 +19,5 @@ export type IEvent = {
     color: string;
     capacity: number;
     occupied: number;
+    block: number;
 };

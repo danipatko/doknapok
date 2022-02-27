@@ -28,6 +28,7 @@ const ieventSchema = new Schema(IEventEntity, {
     color: { type: 'string' },
     capacity: { type: 'number' },
     occupied: { type: 'number' },
+    block: { type: 'boolean' }, // true if in the first block, otherwise false
 });
 
 /**

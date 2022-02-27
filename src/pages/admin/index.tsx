@@ -21,11 +21,22 @@ export async function getServerSideProps(ctx: NextPageContext) {
     return { props: { id: 'heheheha' } };
 }
 
+const xd = {
+    title: 'heheheha',
+    guest: 'heheheha',
+    location: 'heheheha',
+    capacity: 1,
+    description: 'behheheheheheheheheheha',
+    color: '#fff',
+    block: false,
+    id: '',
+};
+
 const DashBoard = (props: any) => {
     return (
         <div className='flex justify-center items-center h-screen'>
             <i className='fa-solid fa-wheelchair'></i>
-            <AddEvent />
+            <AddEvent mode='edit' values={xd} />
         </div>
     );
 };
