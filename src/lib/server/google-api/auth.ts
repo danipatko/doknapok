@@ -1,13 +1,14 @@
 import { withUser } from '../database/redis';
+import { getClass } from '../util';
 
+// Restrict allowed login domains to this specific one (leave undefined to accept all)
 const RESTRICT_DOMAIN: string | undefined = 'szlgbp.hu';
 
 /**
- * This function is used to retrieve an access token from the user's authorization token and the application's client secret
+ * Step 2 of the authentication flow
+ * Get the user's access token from the authorization code and the client secret
  */
-export const fetchAccessToken = async (
-    code: string
-): Promise<undefined | { access_token: string; scope: string; id_token: string; token_type: string }> => {
+const fetchAccessToken = async (code: string): Promise<undefined | { access_token: string; scope: string; id_token: string; token_type: string }> => {
     // return if process.env isn't working
     if (!(process.env.CLIENT_ID && process.env.CLIENT_SECRET)) {
         console.error('Error retrieving access token: client id or client secret is not present in .env file');
@@ -37,7 +38,12 @@ export const fetchAccessToken = async (
     return (await response.json()) as { access_token: string; scope: string; id_token: string; token_type: string };
 };
 
-export const fetchUserInfo = async (creds: {
+/**
+ * Step 3 of the authentication flow.
+ * Fetches the public user information using the user's access token
+ * @returns google id, name, email, picture, account domain (hd)
+ */
+const fetchUserInfo = async (creds: {
     access_token: string;
     scope: string;
     id_token: string;
@@ -72,7 +78,8 @@ export const fetchUserInfo = async (creds: {
 };
 
 /**
- * Returns the id of the user or an error message
+ * Create a new user account or find existing one from authorization code
+ * @returns if ok is true, the id of the account otherwise the error message
  */
 export const createUser = async (code: string): Promise<{ ok: boolean; id: string }> => {
     const creds = await fetchAccessToken(code);
@@ -111,26 +118,4 @@ export const createUser = async (code: string): Promise<{ ok: boolean; id: strin
         // else create record in database
         return { ok: true, id };
     });
-};
-
-/**
- * Utility function to get the year when the school started
- * (eg. 2022-2-2 started in 2021 but 2022-9-5 starts in 2022)
- */
-const schoolYear = (date: Date) => {
-    return date.getFullYear() - (date.getMonth() < 6 ? 1 : 0);
-};
-
-/**
- * Fetch the class in a string format
- */
-const getClass = (email: string): string | null => {
-    const match = /\.(.{2,3})@/gm.exec(email);
-    if (!match) {
-        console.log(`Error: invalid e-mail address (class pattern not found)`); // Debug
-        return null;
-    }
-
-    const evfolyam = schoolYear(new Date()) - 2000 - parseInt(match[1].substring(0, 2)) + 8;
-    return `${evfolyam < 9 ? 'NY' : evfolyam}${match[1][2]}`;
 };

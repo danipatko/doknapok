@@ -1,10 +1,13 @@
 import { Schema, Entity, Repository, Client } from 'redis-om';
 
-const REDIS_URL = 'redis://127.0.0.1:6379'; // Note: in docker compose, this value may be 'redis://redis:6379'
+// Note: in docker compose, this value may be 'redis://redis:6379'
+// TODO: put this in dotenv
+const REDIS_URL = 'redis://127.0.0.1:6379';
+
 const client = new Client();
 
-class UserEntity extends Entity {}
-class IEventEntity extends Entity {}
+export class UserEntity extends Entity {}
+export class IEventEntity extends Entity {}
 
 const userSchema = new Schema(UserEntity, {
     name: { type: 'string' },
@@ -48,20 +51,9 @@ export const flushAll = async () => {
 };
 
 /**
- * Reindex a specific repository
- */
-export const reindex = async (repo: Repository<any>) => {
-    try {
-        await repo.createIndex();
-        await repo.dropIndex();
-    } finally {
-        await repo.createIndex();
-    }
-};
-
-/**
  * Wrapper to make connection checking easier with a simple callback
  * @param callback: function with the userRepository as a parameter
+ * @returns the generic type assigned to the callback function
  */
 export const withUser = async <Type>(callback: (repo: Repository<UserEntity>) => Promise<Type>): Promise<Type> => {
     await connect();
@@ -71,6 +63,7 @@ export const withUser = async <Type>(callback: (repo: Repository<UserEntity>) =>
 /**
  * Wrapper to make connection checking easier with a simple callback
  * @param callback: function with the ieventRepository as a parameter
+ * @returns the generic type assigned to the callback function
  */
 export const withEvent = async <Type>(callback: (repo: Repository<IEventEntity>) => Promise<Type>): Promise<Type> => {
     await connect();
