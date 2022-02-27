@@ -5,7 +5,7 @@ const Layout = (props: any) => {
 
     return (
         <div>
-            <div>{user ? `Logged in as ${user.name}` : 'Not logged in'}</div>
+            <div>{user ? `Logged in as ${user.name} | ${user.admin ? 'ADMIN' : ''} | ${user.class}` : 'Not logged in'}</div>
             <div>{props.children}</div>;
         </div>
     );

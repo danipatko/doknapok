@@ -7,13 +7,13 @@ const client = new Client();
 
 export class UserEntity extends Entity {}
 export class IEventEntity extends Entity {}
-export class AdminEntity extends Entity {}
 
 const userSchema = new Schema(UserEntity, {
     name: { type: 'string' },
     email: { type: 'string' },
     class: { type: 'string' },
     picture: { type: 'string' },
+    admin: { type: 'boolean' },
     event_1_enrolled: { type: 'date' },
     event_1_id: { type: 'string' },
     event_2_enrolled: { type: 'date' },
@@ -28,12 +28,6 @@ const ieventSchema = new Schema(IEventEntity, {
     color: { type: 'string' },
     capacity: { type: 'number' },
     occupied: { type: 'number' },
-});
-
-const adminSchema = new Schema(AdminEntity, {
-    name: { type: 'string' },
-    email: { type: 'string' },
-    picture: { type: 'string' },
 });
 
 /**
@@ -72,14 +66,4 @@ export const withUser = async <Type>(callback: (repo: Repository<UserEntity>) =>
 export const withEvent = async <Type>(callback: (repo: Repository<IEventEntity>) => Promise<Type>): Promise<Type> => {
     await connect();
     return await callback(client.fetchRepository<IEventEntity>(ieventSchema));
-};
-
-/**
- * Wrapper to make connection checking easier with a simple callback
- * @param callback: function with the adminRepositroy as a parameter
- * @returns the generic type assigned to the callback function
- */
-export const withAdmin = async <Type>(callback: (repo: Repository<AdminEntity>) => Promise<Type>): Promise<Type> => {
-    await connect();
-    return await callback(client.fetchRepository<AdminEntity>(adminSchema));
 };

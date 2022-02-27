@@ -1,4 +1,4 @@
-import { withAdmin, withUser } from '../database/redis';
+import { withUser } from '../database/redis';
 import { getClass } from '../util';
 
 // Restrict allowed login domains to this specific one (leave undefined to accept all)
@@ -92,38 +92,21 @@ export const createUser = async (code: string): Promise<{ ok: boolean; id: strin
     if (RESTRICT_DOMAIN && data.hd != RESTRICT_DOMAIN)
         return { ok: false, id: `Error: given e-mail address domain (${data.hd}) does not match '${RESTRICT_DOMAIN}'` };
 
-    // TODO: check if email belongs to a teacher
-    if (ADMIN_EMAILS.includes(data.email))
-        return await withAdmin(async (repo): Promise<{ ok: boolean; id: string; admin?: boolean }> => {
-            await repo.createIndex();
-
-            const user = await repo.search().where('email').equals(data.email).returnFirst();
-            if (user !== null) return { ok: true, id: user.entityId, admin: true };
-
-            const en = repo.createEntity({
-                name: data.name,
-                email: data.email,
-                picture: data.picture,
-            });
-
-            const id = await repo.save(en);
-
-            return { ok: true, id, admin: true };
-        });
-
     // create user
     return await withUser(async (repo): Promise<{ ok: boolean; id: string; admin?: boolean }> => {
         // 01FWVFEEX1JF1FWPKNPZAHFF7T
         await repo.createIndex();
+        const admin = ADMIN_EMAILS.includes(data.email);
         // check if user already exists
-        const user = await repo.search().where('email').equals(data.email).returnFirst();
-        if (user !== null) return { ok: true, id: user.entityId, admin: false };
+        const user = await repo.search().where('email').equals(data.email).and('admin').eq(admin).returnFirst();
+        if (user !== null) return { ok: true, id: user.entityId, admin };
 
         const en = repo.createEntity({
             name: data.name,
             email: data.email,
             picture: data.picture,
             class: getClass(data.email),
+            admin,
             event_1_enrolled: null,
             event_1_id: null,
             event_2_enrolled: null,
@@ -133,6 +116,6 @@ export const createUser = async (code: string): Promise<{ ok: boolean; id: strin
         const id = await repo.save(en);
 
         // else create record in database
-        return { ok: true, id, admin: false };
+        return { ok: true, id, admin };
     });
 };
