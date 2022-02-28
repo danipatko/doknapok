@@ -1,17 +1,16 @@
 export type User = {
-    id: string;
     name: string;
     email: string;
     class: string;
+    picture: string;
     admin: boolean;
-    event_1_enrolled: Date;
-    event_1_id: string;
-    event_2_enrolled: Date;
-    event_2_id: string;
+    event_1_enrolled: Date | null;
+    event_1_id: string | null;
+    event_2_enrolled: Date | null;
+    event_2_id: string | null;
 };
 
 export type IEvent = {
-    id: string;
     title: string;
     description: string;
     guest: string;

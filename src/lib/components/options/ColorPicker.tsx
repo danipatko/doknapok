@@ -21,7 +21,7 @@ const ColorPicker = () => {
         <div className='p-2'>
             <div className='text-sm text-zinc-400 px-1 '>Szín</div>
             <div className='flex'>
-                <div ref={colorRef} className='px-5 border border-main-highlight mr-2'></div>
+                <div ref={colorRef} className='p-5 border border-main-highlight mr-2'></div>
                 <input
                     id='color'
                     onChange={handleChange}

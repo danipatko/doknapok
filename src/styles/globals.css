@@ -3,4 +3,10 @@
 @tailwind utilities;
 
 @layer base {
+    .font-contrast {
+        background: inherit;
+        background-clip: text;
+        color: transparent;
+        filter: invert(1) grayscale(1) contrast(9);
+    }
 }

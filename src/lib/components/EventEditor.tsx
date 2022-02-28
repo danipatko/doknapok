@@ -23,9 +23,7 @@ const EventEditor = ({
 }) => {
     const [selectedBlock, selectBlock] = useState<boolean>(true);
     const setBlock = (b: boolean) => selectBlock(b);
-
-    const [editorShown, showEditor] = useState<boolean>(true);
-
+    const [editorShown, showEditor] = useState<boolean>(false);
     const [error, setError] = useState<string>('');
 
     /* useEffect(() => {
@@ -72,7 +70,7 @@ const EventEditor = ({
                     <h1 className='dark:text-zinc-200 text-3xl text-center mb-10'>
                         {mode == 'create' ? 'Új program hozzáadása' : 'Program szerkesztése'}
                     </h1>
-                    <div className='my-5 md:grid md:gap-4 text-lg md:grid-cols-1'>
+                    <div className='my-5 md:grid md:gap-4 text-lg md:grid-cols-2'>
                         <Input className='col-span-2' id='title' type='text' placeholder='Cím' />
                         <Input id='guest' type='text' placeholder='Előadó' />
                         <Input id='location' type='text' placeholder='Helyszín' />
