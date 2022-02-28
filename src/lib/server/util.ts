@@ -19,3 +19,16 @@ export const getClass = (email: string): string | null => {
     const evfolyam = schoolYear(new Date()) - 2000 - parseInt(match[1].substring(0, 2)) + 8;
     return `${evfolyam < 9 ? 'NY' : evfolyam}${match[1][2]}`;
 };
+
+const WHITE_VALUE = 255 * 3;
+
+/**
+ * Decide if text color should be black or white depending on background color
+ */
+export const isWhite = (background: string): boolean => {
+    background = background.replace('#', '');
+    return (
+        parseInt(background.substring(0, 2), 16) + parseInt(background.substring(2, 4), 16) + parseInt(background.substring(4, 6), 16) <
+        WHITE_VALUE / 2.5
+    );
+};

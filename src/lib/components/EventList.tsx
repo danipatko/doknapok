@@ -6,7 +6,7 @@ const events: IEvent[] = [
         title: 'Tutel',
         block: 1,
         capacity: 69,
-        color: '696969',
+        color: '#ff0000',
         description: 'Lorem ipsum dolor shit amet',
         guest: 'John DOe',
         location: 'I. 34',
@@ -17,8 +17,8 @@ const events: IEvent[] = [
 const EventList = (/* { events }: { events: IEvent[] }*/) => {
     return (
         <div className='md:grid md:grid-flow-row md:gap-4'>
-            {events.map((x) => (
-                <Event data={x} />
+            {events.map((x, i) => (
+                <Event key={i} data={x} />
             ))}
         </div>
     );
