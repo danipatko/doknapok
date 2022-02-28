@@ -13,7 +13,7 @@ interface EventProps {
 
 const Event = (props: EventProps) => {
     return (
-        <div className='flex basis-1/5 h-72 flex-col border border-zinc-200 rounded-lg' style={{ minWidth: 250 }}>
+        <div className='flex basis-1/5 h-72 flex-col border border-zinc-200 rounded-lg' style={{ minWidth: 280 }}>
             <div
                 className='h-1/3 rounded-t-lg'
                 style={{
