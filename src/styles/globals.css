@@ -2,7 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base{
-    body{@apply bg-vscgrey}
-    .navItem{@apply text-lg font-bold text-zinc-200};
+@layer base {
+    body {
+        @apply bg-vscgrey;
+    }
+    .navItem {
+        @apply text-lg font-bold text-zinc-200;
+    }
 }
