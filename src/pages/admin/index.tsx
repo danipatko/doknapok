@@ -1,6 +1,4 @@
 import { NextPageContext } from 'next';
-import EventEditor from '../../lib/components/EventEditor';
-import EventList from '../../lib/components/EventList';
 import { getID } from '../api/auth/token';
 
 const homePageRedirect = {
@@ -34,11 +32,7 @@ const xd = {
 };
 
 const DashBoard = (props: any) => {
-    return (
-        <div>
-            <EventList />
-        </div>
-    );
+    return <div></div>;
 };
 
 export default DashBoard;
