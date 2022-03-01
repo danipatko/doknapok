@@ -9,7 +9,7 @@ const Block = ({ onSelect }: { onSelect: (firstSelected: boolean) => void }) => 
     };
 
     return (
-        <div className='flex w-full justify-center py-4' style={{minWidth:200}}>
+        <div className='flex w-full justify-center py-4' style={{minWidth:100}}>
             <div className='border border-fore flex w-1/6'>
                 <div
                     onClick={() => select(true)}

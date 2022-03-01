@@ -1,9 +1,9 @@
 import Countdown from './Countdown';
 import Head from 'next/head';
-import useUser from '../hooks/user';
+//import useUser from '../hooks/user';
 
 const Layout = (props: any) => {
-    const user = useUser();
+    //const user = useUser();
 
     return (
         <div className='dark'>

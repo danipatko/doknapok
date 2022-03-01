@@ -17,9 +17,9 @@ const Home: NextPage = () => {
                     setBlock(first);
                 }}
             />
-            <div className='flex w-full h-full px-10 py-2'>
+            <div className='flex flex-wrap w-full h-full px-10 py-2 justify-center'>
                 {block ? (
-                    <div className='flex flex-wrap flex-row w-full h-full gap-10 justify-center'>
+                    <div className='flex flex-wrap flex-col w-1/3 h-full gap-10 justify-center'>
                         <Event
                             cim='Ez egy kicsit hosszabb cím'
                             helyszin='1.34'
