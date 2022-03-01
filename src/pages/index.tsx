@@ -1,23 +1,51 @@
-import type { NextPage } from 'next';
-import Event from '../lib/components/Event';
-import { useState } from 'react';
-import Block from '../lib/components/Block';
+import { ReactElement } from 'react';
 import { CLIENT_ID } from '../lib/server/env';
+import Head from 'next/head';
+import Layout from '../lib/components/user/Layout';
 
 const redirect = `https://accounts.google.com/o/oauth2/v2/auth?scope=https%3A//www.googleapis.com/auth/userinfo.email&include_granted_scopes=true&response_type=code&redirect_uri=http%3A//localhost%3A3000/api/auth/redirect&client_id=${CLIENT_ID}`;
-// http://localhost:3000/auth/redirect?state=state_parameter_passthrough_value&code=4%2F0AX4XfWjPCXbOmjOnu0bzNeMaHwFjEcWxNkt3hE64LWHS962uJvHZpQKBPD-zWpM7nP2bvQ&scope=profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile
 
-const Home: NextPage = () => {
-    const [block, setBlock] = useState(true);
-
+const Home = () => {
     return (
-        <div className='text-zinc-200'>
-            <Block
-                onSelect={(first) => {
-                    setBlock(first);
-                }}
-            />
-            <div className='flex w-full h-full px-10 py-2'>
+        <>
+            <Head>
+                <title>Dök napok</title>
+            </Head>
+            <div className='p-2 text-center w-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white text-sm md:text-base'>
+                Jelentkezés lezárásáig hátralevő idő: <span className='text-white font-semibold'>1 nap 2 óra 3 perc</span>
+            </div>
+            <div className='mt-2.5 md:mt-5 lg:mt-10 flex justify-center items-center'>
+                <div className='md:w-[80vw] lg:w-[70vw] xl:w-[50vw] p-5 md:p-0'>
+                    <h1 className='text-xl md:text-2xl'>Hogyan jelentkezek?</h1>
+                    <section className='my-5 md:my-10 text-base md:text-lg'>
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vel alias, soluta optio vero obcaecati sequi illo voluptates in
+                        libero accusamus delectus numquam ullam rerum! Laudantium consectetur nesciunt iste tempora neque.
+                    </section>
+                    <section className='my-5 md:my-10 text-base md:text-lg'>
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vel alias, soluta optio vero obcaecati sequi illo voluptates in
+                        libero accusamus delectus numquam ullam rerum! Laudantium consectetur nesciunt iste tempora neque.
+                    </section>
+
+                    <div className='mt-10 md:mt-15 lg:mt-20 text-center'>
+                        <a href={redirect} className='text-white p-2 bg-indigo-500 rounded-md hover:bg-indigo-400 transition-colors'>
+                            Bejelentkezés
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </>
+    );
+};
+
+// this sets the default layout to the user one
+Home.getLayout = (page: ReactElement) => {
+    return <Layout>{page}</Layout>;
+};
+
+export default Home;
+
+/* 
+<div className='flex w-full h-full px-10 py-2'>
                 {block ? (
                     <div className='flex flex-wrap flex-row w-full h-full gap-10 justify-center'>
                         <Event
@@ -74,8 +102,4 @@ const Home: NextPage = () => {
                     </div>
                 )}
             </div>
-        </div>
-    );
-};
-
-export default Home;
+*/

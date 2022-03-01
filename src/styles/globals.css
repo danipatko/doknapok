@@ -3,10 +3,11 @@
 @tailwind utilities;
 
 @layer base {
-    body {
-        @apply bg-vscgrey;
-    }
-    .navItem {
-        @apply text-lg font-bold text-zinc-200;
+    input,
+    textarea,
+    button,
+    select,
+    a {
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
     }
 }
