@@ -7,6 +7,7 @@ const client = new Client();
 
 export class UserEntity extends Entity {}
 export class IEventEntity extends Entity {}
+export class EnrollEntity extends Entity {}
 
 const userSchema = new Schema(UserEntity, {
     name: { type: 'string' },
@@ -14,10 +15,10 @@ const userSchema = new Schema(UserEntity, {
     class: { type: 'string' },
     picture: { type: 'string' },
     admin: { type: 'boolean' },
-    event_1_enrolled: { type: 'date' },
-    event_1_id: { type: 'string' },
-    event_2_enrolled: { type: 'date' },
-    event_2_id: { type: 'string' },
+    block1: { type: 'string' },
+    block2: { type: 'string' },
+    donedate: { type: 'date' },
+    done: { type: 'boolean' },
 });
 
 const ieventSchema = new Schema(IEventEntity, {
@@ -27,7 +28,7 @@ const ieventSchema = new Schema(IEventEntity, {
     location: { type: 'string' },
     color: { type: 'string' },
     capacity: { type: 'number' },
-    occupied: { type: 'number' },
+    participants: { type: 'number' },
     block: { type: 'boolean' }, // true if in the first block, otherwise false
 });
 

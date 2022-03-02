@@ -4,10 +4,10 @@ export type User = {
     class: string;
     picture: string;
     admin: boolean;
-    event_1_enrolled: Date | null;
-    event_1_id: string | null;
-    event_2_enrolled: Date | null;
-    event_2_id: string | null;
+    block1: string;
+    block2: string;
+    donedate: Date;
+    done: boolean;
 };
 
 export type IEvent = {
@@ -19,4 +19,11 @@ export type IEvent = {
     capacity: number;
     occupied: number;
     block: number;
+};
+
+export const redirectToRoot = {
+    redirect: {
+        permanent: false,
+        destination: '/',
+    },
 };

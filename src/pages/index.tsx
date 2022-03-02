@@ -1,7 +1,8 @@
 import { ReactElement } from 'react';
 import { CLIENT_ID } from '../lib/server/env';
 import Head from 'next/head';
-import Layout from '../lib/components/user/Layout';
+import Layout from '../lib/components/home/Layout';
+import Deadline from '../lib/components/shared/Deadline';
 
 const redirect = `https://accounts.google.com/o/oauth2/v2/auth?scope=https%3A//www.googleapis.com/auth/userinfo.email&include_granted_scopes=true&response_type=code&redirect_uri=http%3A//localhost%3A3000/api/auth/redirect&client_id=${CLIENT_ID}`;
 
@@ -11,9 +12,7 @@ const Home = () => {
             <Head>
                 <title>Dök napok</title>
             </Head>
-            <div className='p-2 text-center w-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white text-sm md:text-base'>
-                Jelentkezés lezárásáig hátralevő idő: <span className='text-white font-semibold'>1 nap 2 óra 3 perc</span>
-            </div>
+            <Deadline time={Date.now()} />
             <div className='mt-2.5 md:mt-5 lg:mt-10 flex justify-center items-center'>
                 <div className='md:w-[80vw] lg:w-[70vw] xl:w-[50vw] p-5 md:p-0'>
                     <h1 className='text-xl md:text-2xl'>Hogyan jelentkezek?</h1>

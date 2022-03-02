@@ -1,5 +1,4 @@
-// layout/navbar for the admins side
-// should contain user data
+// layout/navbar for the user's side
 import { useState } from 'react';
 
 const Navbar = ({ onDarkmode }: { onDarkmode: () => void }) => {
@@ -25,3 +24,5 @@ const Layout = (props: any) => {
 };
 
 export default Layout;
+
+//

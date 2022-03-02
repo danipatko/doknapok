@@ -32,3 +32,24 @@ export const isWhite = (background: string): boolean => {
         WHITE_VALUE / 2.5
     );
 };
+
+/**
+ * Should contain all utility settings
+ */
+class Settings {
+    constructor() {
+        // read static settings.json
+        import('fs').then((fs) => {
+            const contents = JSON.parse(fs.readFileSync('settings.json').toString());
+            this.deadline = contents.deadline as number;
+        });
+    }
+
+    public deadline: number = 0;
+    public setDeadline(deadline: Date): void {
+        this.deadline = deadline.getTime();
+    }
+}
+
+// export instance of settings
+export const settings = new Settings();
