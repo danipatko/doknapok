@@ -5,7 +5,9 @@ import { useState } from 'react';
 const Navbar = ({ onDarkmode }: { onDarkmode: () => void }) => {
     return (
         <div className='py-2 px-5 dark:bg-back-highlight bg-white border-b border-b-gray-300 dark:border-b-zinc-700 flex justify-between md:justify-around'>
-            <div className='text-2xl font-extralight'>Dök napok</div>
+            <div className='text-2xl font-extralight'>
+                <i className='fa fa-shield-check'></i> Admin - Dök napok
+            </div>
             <div onClick={onDarkmode}>
                 <i className='fa fa-sun'></i>
             </div>
