@@ -1,3 +1,5 @@
+import fs from 'fs';
+
 /**
  * Utility function to get the year when the school started
  * (eg. 2022-2-2 started in 2021 but 2022-9-5 starts in 2022)
@@ -39,19 +41,17 @@ export const isWhite = (background: string): boolean => {
 class Settings {
     constructor() {
         // read static settings.json
-        import('fs').then((fs) => {
-            this.preset = JSON.parse(fs.readFileSync('settings.json').toString()) as {
-                deadline: number;
-                block1: {
-                    start: string;
-                    end: string;
-                };
-                block2: {
-                    start: string;
-                    end: string;
-                };
+        this.preset = JSON.parse(fs.readFileSync('settings.json').toString()) as {
+            deadline: number;
+            block1: {
+                start: string;
+                end: string;
             };
-        });
+            block2: {
+                start: string;
+                end: string;
+            };
+        };
     }
 
     public preset: {
@@ -77,7 +77,7 @@ class Settings {
     };
 
     protected saveSettings(): void {
-        import('fs').then((fs) => fs.writeFileSync('settings.json', JSON.stringify(this.preset)));
+        fs.writeFileSync('settings.json', JSON.stringify(this.preset));
     }
 
     public setBlock1Time(start: string, end: string): void {
@@ -86,7 +86,7 @@ class Settings {
     }
 
     public setBlock2Time(start: string, end: string): void {
-        this.preset.block1 = { start, end };
+        this.preset.block2 = { start, end };
         this.saveSettings();
     }
 

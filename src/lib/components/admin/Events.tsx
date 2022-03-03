@@ -18,16 +18,16 @@ const Event = (data: { id: string; title: string; guest: string; location: strin
                 </div>
             </div>
             <div className='flex items-center gap-2'>
-                <div className='text-green-500 rounded-sm hover:dark:bg-zinc-700 hover:bg-zinc-200 text-lg py-1 px-3'>
-                    <Link href={`/admin/events/${data.id}`}>
+                <Link href={`/admin/events/${data.id}`}>
+                    <div className='text-green-500 rounded-sm hover:dark:bg-zinc-700 hover:bg-zinc-200 text-lg py-1 px-3'>
                         <i className='fa-solid fa-file-csv'></i>
-                    </Link>
-                </div>
-                <div className='text-indigo-500 rounded-sm hover:dark:bg-zinc-700 hover:bg-zinc-200 text-lg py-1 px-2'>
-                    <Link href={`/admin/events/${data.id}`}>
+                    </div>
+                </Link>
+                <Link href={`/admin/events/${data.id}`}>
+                    <div className='text-indigo-500 rounded-sm hover:dark:bg-zinc-700 hover:bg-zinc-200 text-lg py-1 px-2'>
                         <i className='fa-solid fa-pen'></i>
-                    </Link>
-                </div>
+                    </div>
+                </Link>
                 <div className='text-red-500 rounded-sm hover:dark:bg-zinc-700 hover:bg-zinc-200 text-lg py-1 px-2.5 fa-solid fa-trash'></div>
             </div>
         </div>
@@ -36,6 +36,7 @@ const Event = (data: { id: string; title: string; guest: string; location: strin
 
 const Events = ({
     events,
+    selected,
     onUpdate,
 }: {
     events: {
@@ -44,17 +45,20 @@ const Events = ({
         error?: string;
         date: { start: string; end: string };
     };
+    selected: number;
     onUpdate: () => void;
 }) => {
     const updateTime = async (date: { start: string; end: string }) => {
-        const res = await fetch('/api/admin/events/block/setdate', { method: 'POST', body: JSON.stringify({ ...date }) });
+        const res = await fetch('/api/admin/events/block/setdate', { method: 'POST', body: JSON.stringify({ ...date, block: selected == 1 }) });
         if (!res.ok) {
             console.log(`[${res.status}] ${res.statusText}`);
             return;
         }
-
-        const data = await res.json();
-        if (!data.ok) console.log('an error occured when setting time');
+        if (!(await res.json()).ok) {
+            console.error('An error occured when setting time');
+            return;
+        }
+        events.date = date;
     };
 
     if (events.loading) return <div className='h-[80vh] flex justify-center items-center animate-pulse'>Betöltés...</div>;

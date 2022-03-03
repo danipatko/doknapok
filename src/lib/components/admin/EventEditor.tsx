@@ -64,7 +64,10 @@ const EventEditor = ({
         if (!response.ok) setError(`Váratlan hiba történt [${response.status}] ${response.statusText}`);
         const { error, ok } = await response.json();
 
-        if (!ok || error) setError(error);
+        if (!ok || error) {
+            setError(error);
+            return;
+        }
         Router.push('/admin');
     };
 
@@ -82,7 +85,7 @@ const EventEditor = ({
                     <textarea
                         id='description'
                         rows={5}
-                        className='w-full p-2 outline-none transition-colors dark:bg-back-highlight focus:border-b-fore border-b-2 border-b-main-highlight'
+                        className='w-full p-2 outline-none transition-colors dark:bg-back-highlight focus:border-b-fore dark:focus:border-b-fore border-b-2 border-b-zinc-300 dark:border-b-zinc-600'
                     ></textarea>
                 </div>
                 <div className='p-2'>

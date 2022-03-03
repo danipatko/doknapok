@@ -66,7 +66,11 @@ const DashBoard = ({ stats, user, settings }: { stats: { userCount: number; date
                         {selected == 0 ? (
                             <div>{JSON.stringify(stats)}</div>
                         ) : (
-                            <Events onUpdate={() => (selected == 1 ? updateBlock1() : updateBlock2())} events={selected == 1 ? block1 : block2} />
+                            <Events
+                                selected={selected}
+                                onUpdate={() => (selected == 1 ? updateBlock1() : updateBlock2())}
+                                events={selected == 1 ? block1 : block2}
+                            />
                         )}
                     </div>
                 </div>

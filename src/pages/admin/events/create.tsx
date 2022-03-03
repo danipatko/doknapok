@@ -18,7 +18,7 @@ export async function getServerSideProps(context: NextPageContext) {
     const user = await getUser(context.req, context.res, 'admin');
     if (!user) return redirectToRoot;
 
-    return { props: { block1: settings.block1, block2: settings.block2 } };
+    return { props: { block1: settings.preset.block1, block2: settings.preset.block2 } };
 }
 
 const CreateEvent = ({ block1, block2 }: { block1: { start: string; end: string }; block2: { start: string; end: string } }) => {

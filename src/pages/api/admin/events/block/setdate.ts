@@ -14,15 +14,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return;
     }
 
-    const { block, from, to } = JSON.parse(req.body);
-
-    if (!(block !== undefined && from && to && from.match(/^\d{2}\:\d{2}$/gm) && to.match(/^\d{2}\:\d{2}$/gm))) {
+    const { block, start, end } = JSON.parse(req.body);
+    if (!(block !== undefined && start && end && start.match(/^\d{2}\:\d{2}$/gm) && end.match(/^\d{2}\:\d{2}$/gm))) {
         res.status(404).send('not found');
         return;
     }
 
-    if (block) settings.setBlock1Time(from, to);
-    else settings.setBlock2Time(from, to);
+    if (block) settings.setBlock1Time(start, end);
+    else settings.setBlock2Time(start, end);
 
     res.status(200).json({ ok: true });
 }
