@@ -1,4 +1,14 @@
-const Block = ({ selected, onSelect }: { selected: boolean; onSelect: (firstSelected: boolean) => void }) => {
+const Block = ({
+    block1,
+    block2,
+    selected,
+    onSelect,
+}: {
+    block1: { start: string; end: string };
+    block2: { start: string; end: string };
+    selected: boolean;
+    onSelect: (firstSelected: boolean) => void;
+}) => {
     const select = (first: boolean) => onSelect(first);
 
     return (
@@ -6,18 +16,18 @@ const Block = ({ selected, onSelect }: { selected: boolean; onSelect: (firstSele
             <div
                 onClick={() => select(true)}
                 className={`p-1 flex-1 text-center select-none cursor-pointer text-white ${
-                    selected ? 'bg-fore hover:bg-fore-highlight' : 'bg-main hover:bg-main-highlight'
+                    selected ? 'bg-fore hover:bg-fore-highlight' : 'dark:bg-back-highlight hover:dark:bg-main'
                 } `}
             >
-                9:20 - 11:00
+                {block1.start} - {block1.end}
             </div>
             <div
                 onClick={() => select(false)}
                 className={`p-1 flex-1 text-center select-none cursor-pointer text-white ${
-                    selected ? 'bg-main hover:bg-main-highlight' : 'bg-fore hover:bg-fore-highlight'
+                    selected ? 'dark:bg-back-highlight hover:dark:bg-main' : 'bg-fore hover:bg-fore-highlight'
                 } `}
             >
-                12:00 - 14:00
+                {block2.start} - {block2.end}
             </div>
         </div>
     );

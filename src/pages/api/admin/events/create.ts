@@ -9,10 +9,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return;
     }
 
-    const { title, description, guest, location, color, capacity } = JSON.parse(req.body);
+    const { title, description, guest, location, color, capacity, block } = JSON.parse(req.body);
 
     // bad request
-    if (!(title && description && guest && location && color && capacity)) {
+    if (!(title && description && guest && location && color && capacity && block)) {
         res.status(400).send('Missing field from request');
         return;
     }
@@ -32,6 +32,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 color,
                 capacity,
                 occupied: 0,
+                block,
             });
 
             return { ok: true };

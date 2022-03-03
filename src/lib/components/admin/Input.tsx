@@ -15,7 +15,7 @@ const Input = ({
             <input
                 id={id}
                 type={type}
-                className='px-2 pb-2 w-full text-white transition-colors focus:border-b-fore outline-none bg-main border-b-2 border-b-main-highlight'
+                className='px-2 pb-2 w-full transition-colors focus:border-b-fore focus:dark:border-b-fore outline-none dark:bg-back-highlight border-b-2 border-b-zinc-300 dark:border-b-zinc-600'
             />
         </div>
     );

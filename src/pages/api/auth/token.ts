@@ -44,6 +44,6 @@ export const getUser = async (
 ): Promise<UserEntity | null> => {
     const id = getID(req, res, admin);
     if (!id) return null;
-
-    return await withUser(async (repo) => await repo.fetch(id));
+    const u = await withUser(async (repo) => await repo.fetch(id));
+    return Object.keys(u.entityData).length ? u : null;
 };

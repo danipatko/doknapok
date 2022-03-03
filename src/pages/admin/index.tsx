@@ -17,6 +17,8 @@ export async function getServerSideProps(ctx: NextPageContext) {
     if (!admin) return redirectToRoot;
 
     const stats = await withUser(async (repo) => {
+        await repo.createIndex();
+
         const userCount = await repo.search().where('admin').eq(false).count();
         const usersDone = await repo.search().where('admin').eq(false).and('done').eq(true).returnAll();
 
@@ -61,7 +63,11 @@ const DashBoard = ({ stats, user, settings }: { stats: { userCount: number; date
                         </Navitem>
                     </nav>
                     <div className='mt-5'>
-                        {selected == 0 ? <div>Page 1</div> : selected == 1 ? <Events events={block1} /> : <Events events={block2} />}
+                        {selected == 0 ? (
+                            <div>{JSON.stringify(stats)}</div>
+                        ) : (
+                            <Events onUpdate={() => (selected == 1 ? updateBlock1() : updateBlock2())} events={selected == 1 ? block1 : block2} />
+                        )}
                     </div>
                 </div>
             </div>

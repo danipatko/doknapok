@@ -32,51 +32,36 @@ const Event = (data: { id: string; title: string; guest: string; location: strin
 
 const Events = ({
     events,
+    onUpdate,
 }: {
     events: {
         events: IEvent[];
         loading: boolean;
         error?: string;
+        date: { start: string; end: string };
     };
+    onUpdate: () => void;
 }) => {
-    if (events.loading) return <div className='h-[80vh] flex justify-center items-center animate-pulse'>Loading...</div>;
+    if (events.loading) return <div className='h-[80vh] flex justify-center items-center animate-pulse'>Betöltés...</div>;
     return (
         <>
-            <DatePick date={new Date()} onSubmit={() => {}} />
+            <DatePick date={events.date} onSubmit={() => {}} />
             <div className='mt-3 md:mt-7'>
                 <div className='text-lg flex border-b-zinc-200 dark:border-b-zinc-700 border-b justify-between p-2'>
-                    <div>Programok</div>
-                    <Link href='/admin/events/new'>
-                        <a className='font-semibold text-indigo-400'>+ Hozzáadás</a>
+                    <div>
+                        Programok
+                        <span onClick={onUpdate} className='pl-3 text-sm font-semibold text-indigo-400 cursor-pointer'>
+                            <i className='hover:animate-spin fa-solid fa-arrows-rotate'></i> Frissítés
+                        </span>
+                    </div>
+                    <Link href='/admin/events/create'>
+                        <a className='font-semibold text-indigo-400 hover:underline'>+ Hozzáadás</a>
                     </Link>
                 </div>
-                <Event
-                    id='heheehha'
-                    color='#23679f'
-                    guest='John Doe'
-                    location='I. 34'
-                    title='An interesting title here'
-                    capacity={40}
-                    occupied={13}
-                />
-                <Event
-                    id='heheehha'
-                    color='#67239f'
-                    guest='John Doe'
-                    location='I. 34'
-                    title='An interesting title here'
-                    capacity={40}
-                    occupied={13}
-                />
-                <Event
-                    id='heheehha'
-                    color='#23967f'
-                    guest='John Doe'
-                    location='I. 34'
-                    title='An interesting title here'
-                    capacity={40}
-                    occupied={13}
-                />
+                {JSON.stringify(events)}
+                {events.events.map((x) => (
+                    <Event {...x} />
+                ))}
             </div>
         </>
     );

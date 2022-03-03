@@ -19,6 +19,7 @@ export type IEvent = {
     capacity: number;
     occupied: number;
     block: number;
+    id: string;
 };
 
 export const redirectToRoot = {

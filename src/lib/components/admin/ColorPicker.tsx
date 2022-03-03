@@ -12,7 +12,9 @@ const ColorPicker = () => {
     };
 
     const randomColor = () => {
-        const newColor = `#${Math.floor(Math.random() * MAX_HEX).toString(16)}`;
+        const newColor = `#${Math.floor(Math.random() * MAX_HEX)
+            .toString(16)
+            .toUpperCase()}`;
         input.current.setAttribute('value', newColor);
         colorRef.current.style.backgroundColor = newColor;
     };
@@ -21,13 +23,13 @@ const ColorPicker = () => {
         <div className='p-2'>
             <div className='text-sm text-zinc-400 px-1 '>Szín</div>
             <div className='flex'>
-                <div ref={colorRef} className='p-5 border border-main-highlight mr-2'></div>
+                <div ref={colorRef} className='p-5 border dark:border-zinc-600 border-zinc-300 mr-2'></div>
                 <input
                     id='color'
                     onChange={handleChange}
                     ref={input}
                     type='text'
-                    className='px-2 pb-2 w-full text-white transition-colors focus:border-b-fore outline-none bg-main border-b-2 border-b-main-highlight'
+                    className='px-2 pb-2 w-full transition-colors focus:border-b-fore focus:dark:border-b-fore outline-none dark:bg-back-highlight border-b-2 dark:border-zinc-600 border-zinc-300'
                 />
                 <div onClick={randomColor} className='ml-2 p-2 text-white hover:text-fore-highlight' title='Random szín'>
                     <i className='fa fa-dice'></i>

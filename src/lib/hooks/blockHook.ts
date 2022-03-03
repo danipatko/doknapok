@@ -9,6 +9,7 @@ export const useEvents = (
         events: IEvent[];
         loading: boolean;
         error?: string;
+        date: { start: string; end: string };
     },
     () => void,
     () => void
@@ -18,10 +19,12 @@ export const useEvents = (
         events: IEvent[];
         loading: boolean;
         error?: string;
+        date: { start: string; end: string };
     }>({
         events: [],
         loading: true,
         error: '',
+        date: { start: '', end: '' },
     });
 
     /**
@@ -38,12 +41,16 @@ export const useEvents = (
      */
     const update = () => {
         console.log('FETCH CALLED');
+        setState((s) => {
+            return { ...s, loading: true };
+        });
+
         fetch(`/api/admin/events/block/${block ? 0 : 1}`).then(async (res) => {
             if (!res.ok) {
-                setState({ events: [], loading: false, error: `[${res.status}] ${res.statusText}` });
+                setState({ events: [], loading: false, error: `[${res.status}] ${res.statusText}`, date: { end: '', start: '' } });
                 return;
             }
-            setState({ events: await res.json(), loading: false, error: '' });
+            setState({ ...((await res.json()) as { events: IEvent[]; date: { start: string; end: string } }), loading: false, error: '' });
         });
     };
 

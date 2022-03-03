@@ -26,5 +26,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     setID(id, admin ? true : false, req, res);
 
-    res.status(200).send(`OK - ${id}`);
+    res.status(200).redirect('/programok');
 }
