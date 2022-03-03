@@ -1,7 +1,7 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { createUser } from '../../../lib/server/google-api/auth';
-import { setID } from './token';
+import { setID } from '../../../lib/server/google-api/token';
 
 /**
  * This is the endpoint google sign-in redirects to

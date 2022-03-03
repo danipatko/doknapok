@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { getUser } from './auth/token';
+import { getUser } from '../../lib/server/google-api/token';
 
 /**
  * This endpoint is used to fetch the user's own data (displayed in the navbar)

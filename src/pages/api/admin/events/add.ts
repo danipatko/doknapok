@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { IEventEntity, withEvent } from '../../../../lib/server/database/redis';
-import { getID } from '../../auth/token';
+import { getID } from '../../../../lib/server/google-api/token';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     // admin check

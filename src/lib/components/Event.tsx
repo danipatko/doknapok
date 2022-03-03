@@ -12,28 +12,55 @@ interface EventProps {
 }
 
 const Event = (props: EventProps) => {
+    const [showHide, setShowHide] = useState(false);
+    const [apply, setApply] = useState(false);
+
     return (
-        <div className='flex flex-crow border rounded-lg' style={{ minWidth: 280, borderColor: props.szin }}>
-            <div
-                className='w-1/4 rounded-l-lg'
-                style={{
-                    backgroundColor: props.szin,
-                    color: parseInt('ffffff', 16) / 2 > parseInt(props.szin.slice(1), 16) ? 'rgb(228 228 231)' : 'rgb(0,0,0)',
-                }}
-            >            
-            </div>
-            <div className='flex flex-col'>
-                <div className='flex px-4 text-2xl font-bold justify-center text-center items-center'>
-                        {props.cim}
+        <div className='mt-5 border border-l-[12px] rounded-md flex justify-between p-2 relative' style={{ minWidth: 350, borderColor: props.szin }}>
+            <div>
+                <div className='text-xl font-bold'>{props.cim}</div>
+                <div className='flex flex-row justify-start gap-4 font-medium pt-2'>
+                    <div>Előadó: {props.eloado}</div>
+                    <div>Helyszín: {props.helyszin}</div>
+                    <span className='text-blue-400 font-bold'>
+                        {props.jelentkezok}/{props.ferohelyek}
+                    </span>
                 </div>
-                <div className=' px-4 text-base font-medium'>{props.eloado}</div>
-                <div className=' font-medium px-4'>Helyszín: {props.helyszin}</div>
-                <div className=' border-t flex flex-row w-full justify-between'>
-                    <div className='font-medium p-3'>
-                        Férőhelyek: {props.jelentkezok}/{props.ferohelyek}
-                    </div>                
-                </div>
+                {showHide ? (
+                    <div className='flex flex-col items-center justify-center'>
+                        <div className='py-2'>{props.leiras}</div>
+                        {apply ? (
+                            <button className='p-2 border border-fore rounded-md bg-fore text-black font-medium'>Jelentkezve</button>
+                        ) : (
+                            <button
+                                className='p-2 border border-fore rounded-md bg-fore text-black font-medium'
+                                onClick={() => {
+                                    setApply(true);
+                                }}
+                            >
+                                Jelentkezés
+                            </button>
+                        )}
+                    </div>
+                ) : (
+                    <div></div>
+                )}
             </div>
+            {showHide ? (
+                <i
+                    className='text-blue-400 fa-solid fa-arrow-up absolute bottom-0 right-0 p-2'
+                    onClick={() => {
+                        setShowHide(!showHide);
+                    }}
+                ></i>
+            ) : (
+                <i
+                    className='text-blue-400 fa-solid fa-arrow-down absolute bottom-0 right-0 p-2'
+                    onClick={() => {
+                        setShowHide(!showHide);
+                    }}
+                ></i>
+            )}
         </div>
     );
 };

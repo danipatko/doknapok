@@ -1,5 +1,5 @@
 import { NextPageContext } from 'next';
-import { getID } from '../api/auth/token';
+import { getID } from '../../lib/server/google-api/token';
 
 const homePageRedirect = {
     redirect: {
