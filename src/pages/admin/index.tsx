@@ -35,12 +35,12 @@ export async function getServerSideProps(ctx: NextPageContext) {
 
 const DashBoard = ({ stats, user, settings }: { stats: { userCount: number; dates: Date[] }; user: User; settings: { deadline: number } }) => {
     const [selected, select] = useState<number>(0);
-    const [block1, openBlock1, updateBlock1] = useEvents(true); // first block
-    const [block2, openBlock2, updateBlock2] = useEvents(false); // second one
+    const [block1, openB1, updateB1, removeB1] = useEvents(true); // first block
+    const [block2, openB2, updateB2, removeB2] = useEvents(false); // second one
 
     const sel = (index: number) => {
-        if (index == 1) openBlock1();
-        else if (index == 2) openBlock2();
+        if (index == 1) openB1();
+        else if (index == 2) openB2();
         select(index);
     };
 
@@ -67,8 +67,9 @@ const DashBoard = ({ stats, user, settings }: { stats: { userCount: number; date
                             <div>{JSON.stringify(stats)}</div>
                         ) : (
                             <Events
+                                onRemove={(id) => (selected == 1 ? removeB1(id) : removeB2(id))}
                                 selected={selected}
-                                onUpdate={() => (selected == 1 ? updateBlock1() : updateBlock2())}
+                                onUpdate={() => (selected == 1 ? updateB1() : updateB2())}
                                 events={selected == 1 ? block1 : block2}
                             />
                         )}

@@ -12,7 +12,8 @@ export const useEvents = (
         date: { start: string; end: string };
     },
     () => void,
-    () => void
+    () => void,
+    (id: string) => void
 ] => {
     const [opened, setOpened] = useState<boolean>(false);
     const [state, setState] = useState<{
@@ -40,7 +41,6 @@ export const useEvents = (
      * Fetch the block events and data from the server
      */
     const update = () => {
-        console.log('FETCH CALLED');
         setState((s) => {
             return { ...s, loading: true };
         });
@@ -54,5 +54,18 @@ export const useEvents = (
         });
     };
 
-    return [state, open, update];
+    const remove = async (id: string): Promise<void> => {
+        const res = await fetch(`/api/admin/events/remove`, { method: 'POST', body: JSON.stringify({ id }) });
+        if (!res.ok) {
+            console.log(`[${res.status}] ${res.statusText}`);
+            return;
+        }
+        // remove from frontend
+        setState((s) => {
+            s.events = s.events.filter((x) => x.id != id);
+            return { ...s };
+        });
+    };
+
+    return [state, open, update, remove];
 };

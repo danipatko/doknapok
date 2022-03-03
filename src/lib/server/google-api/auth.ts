@@ -2,7 +2,7 @@ import { withUser } from '../database/redis';
 import { getClass } from '../util';
 
 // Restrict allowed login domains to this specific one (leave undefined to accept all)
-const RESTRICT_DOMAIN: string | undefined = 'szlgbp.hu';
+const RESTRICT_DOMAIN: string | undefined = undefined; // 'szlgbp.hu';
 const ADMIN_EMAILS: string[] = ['patko.daniel.19f@szlgbp.hu'];
 
 /**
@@ -98,7 +98,7 @@ export const createUser = async (code: string): Promise<{ ok: boolean; id: strin
         await repo.createIndex();
         const admin = ADMIN_EMAILS.includes(data.email);
 
-        // check if user already exists
+        // check if user already exists -> log in
         const user = await repo.search().where('email').equals(data.email).and('admin').eq(admin).returnFirst();
         if (user !== null) return { ok: true, id: user.entityId, admin };
 
@@ -108,10 +108,10 @@ export const createUser = async (code: string): Promise<{ ok: boolean; id: strin
             picture: data.picture,
             class: getClass(data.email),
             admin,
-            event_1_enrolled: null,
-            event_1_id: null,
-            event_2_enrolled: null,
-            event_2_id: null,
+            block1: null,
+            block2: null,
+            donedate: null,
+            done: false,
         });
 
         const id = await repo.save(en);

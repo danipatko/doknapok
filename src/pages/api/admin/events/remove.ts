@@ -12,11 +12,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const { id } = JSON.parse(req.body);
 
     // bad request
-    if (!id) res.status(400).send('Missing field from request');
+    if (!id) {
+        res.status(400).send('Missing field from request');
+        return;
+    }
 
     await withEvent(async (repo) => {
         await repo.remove(id);
     });
 
-    res.status(200).json({ success: 1 });
+    res.status(200).send('success');
 }
