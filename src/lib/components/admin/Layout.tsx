@@ -19,7 +19,7 @@ const Layout = (props: any) => {
     const [darkmode, setDarkmode] = useState(true);
 
     return (
-        <div className={`${darkmode ? 'dark bg-back text-white' : 'bg-white text-back'} h-screen`}>
+        <div className={`${darkmode ? 'dark bg-back text-white' : 'bg-white text-back'} min-h-screen h-full`}>
             <Navbar onDarkmode={() => setDarkmode((x) => !x)} />
             <>{props.children}</>
         </div>

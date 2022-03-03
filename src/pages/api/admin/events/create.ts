@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { IEventEntity, withEvent } from '../../../../lib/server/database/redis';
-import { getID } from '../../auth/token';
+import { getID } from '../../../../lib/server/google-api/token';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     // admin check
@@ -12,7 +12,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const { title, description, guest, location, color, capacity, block } = JSON.parse(req.body);
 
     // bad request
-    if (!(title && description && guest && location && color && capacity && block)) {
+    if (!(title && description && guest && location && color && capacity && block !== undefined)) {
         res.status(400).send('Missing field from request');
         return;
     }

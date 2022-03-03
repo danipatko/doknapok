@@ -20,10 +20,14 @@ const Event = (data: { id: string; title: string; guest: string; location: strin
             <div className='flex items-center gap-2'>
                 <div className='text-green-500 rounded-sm hover:dark:bg-zinc-700 hover:bg-zinc-200 text-lg py-1 px-3'>
                     <Link href={`/admin/events/${data.id}`}>
-                        <i className=' fa-solid fa-file-csv'></i>
+                        <i className='fa-solid fa-file-csv'></i>
                     </Link>
                 </div>
-                <div className='text-indigo-500 rounded-sm hover:dark:bg-zinc-700 hover:bg-zinc-200 text-lg py-1 px-2 fa-solid fa-pen'></div>
+                <div className='text-indigo-500 rounded-sm hover:dark:bg-zinc-700 hover:bg-zinc-200 text-lg py-1 px-2'>
+                    <Link href={`/admin/events/${data.id}`}>
+                        <i className='fa-solid fa-pen'></i>
+                    </Link>
+                </div>
                 <div className='text-red-500 rounded-sm hover:dark:bg-zinc-700 hover:bg-zinc-200 text-lg py-1 px-2.5 fa-solid fa-trash'></div>
             </div>
         </div>
@@ -42,25 +46,35 @@ const Events = ({
     };
     onUpdate: () => void;
 }) => {
+    const updateTime = async (date: { start: string; end: string }) => {
+        const res = await fetch('/api/admin/events/block/setdate', { method: 'POST', body: JSON.stringify({ ...date }) });
+        if (!res.ok) {
+            console.log(`[${res.status}] ${res.statusText}`);
+            return;
+        }
+
+        const data = await res.json();
+        if (!data.ok) console.log('an error occured when setting time');
+    };
+
     if (events.loading) return <div className='h-[80vh] flex justify-center items-center animate-pulse'>Betöltés...</div>;
     return (
         <>
-            <DatePick date={events.date} onSubmit={() => {}} />
+            <DatePick date={events.date} onSubmit={updateTime} />
             <div className='mt-3 md:mt-7'>
                 <div className='text-lg flex border-b-zinc-200 dark:border-b-zinc-700 border-b justify-between p-2'>
                     <div>
                         Programok
-                        <span onClick={onUpdate} className='pl-3 text-sm font-semibold text-indigo-400 cursor-pointer'>
+                        <span onClick={onUpdate} className='pl-3 select-none text-sm font-semibold text-indigo-400 cursor-pointer'>
                             <i className='hover:animate-spin fa-solid fa-arrows-rotate'></i> Frissítés
                         </span>
                     </div>
                     <Link href='/admin/events/create'>
-                        <a className='font-semibold text-indigo-400 hover:underline'>+ Hozzáadás</a>
+                        <a className='font-semibold text-indigo-400 hover:underline select-none'>+ Hozzáadás</a>
                     </Link>
                 </div>
-                {JSON.stringify(events)}
-                {events.events.map((x) => (
-                    <Event {...x} />
+                {events.events.map((x, i) => (
+                    <Event key={i} {...x} />
                 ))}
             </div>
         </>

@@ -15,16 +15,16 @@ const Block = ({
         <div className='border border-fore flex'>
             <div
                 onClick={() => select(true)}
-                className={`p-1 flex-1 text-center select-none cursor-pointer text-white ${
-                    selected ? 'bg-fore hover:bg-fore-highlight' : 'dark:bg-back-highlight hover:dark:bg-main'
+                className={`p-1 flex-1 text-center select-none cursor-pointer ${
+                    selected ? 'bg-fore hover:bg-fore-highlight text-white' : 'dark:bg-back-highlight hover:dark:bg-main'
                 } `}
             >
                 {block1.start} - {block1.end}
             </div>
             <div
                 onClick={() => select(false)}
-                className={`p-1 flex-1 text-center select-none cursor-pointer text-white ${
-                    selected ? 'dark:bg-back-highlight hover:dark:bg-main' : 'bg-fore hover:bg-fore-highlight'
+                className={`p-1 flex-1 text-center select-none cursor-pointer  ${
+                    selected ? 'dark:bg-back-highlight hover:dark:bg-main' : 'bg-fore hover:bg-fore-highlight text-white'
                 } `}
             >
                 {block2.start} - {block2.end}

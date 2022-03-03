@@ -40,33 +40,59 @@ class Settings {
     constructor() {
         // read static settings.json
         import('fs').then((fs) => {
-            const contents = JSON.parse(fs.readFileSync('settings.json').toString());
-            this.deadline = contents.deadline as number;
-            this.block1 = { start: contents.block1start as string, end: contents.block1end as string };
-            this.block2 = { start: contents.block2start as string, end: contents.block2end as string };
+            this.preset = JSON.parse(fs.readFileSync('settings.json').toString()) as {
+                deadline: number;
+                block1: {
+                    start: string;
+                    end: string;
+                };
+                block2: {
+                    start: string;
+                    end: string;
+                };
+            };
         });
     }
 
-    public deadline: number = 0;
-    public block1: { start: string; end: string } = {
-        start: '',
-        end: '',
-    };
-    public block2: { start: string; end: string } = {
-        start: '',
-        end: '',
+    public preset: {
+        deadline: number;
+        block1: {
+            start: string;
+            end: string;
+        };
+        block2: {
+            start: string;
+            end: string;
+        };
+    } = {
+        deadline: 0,
+        block1: {
+            start: '',
+            end: '',
+        },
+        block2: {
+            start: '',
+            end: '',
+        },
     };
 
+    protected saveSettings(): void {
+        import('fs').then((fs) => fs.writeFileSync('settings.json', JSON.stringify(this.preset)));
+    }
+
     public setBlock1Time(start: string, end: string): void {
-        this.block1 = { start, end };
+        this.preset.block1 = { start, end };
+        this.saveSettings();
     }
 
     public setBlock2Time(start: string, end: string): void {
-        this.block1 = { start, end };
+        this.preset.block1 = { start, end };
+        this.saveSettings();
     }
 
     public setDeadline(deadline: Date): void {
-        this.deadline = deadline.getTime();
+        this.preset.deadline = deadline.getTime();
+        this.saveSettings();
     }
 }
 

@@ -3,14 +3,14 @@ import Link from 'next/link';
 import { ReactElement, useState } from 'react';
 import { EntityData } from 'redis-om';
 import Layout from '../../../lib/components/admin/Layout';
-import EventEditor from '../../../lib/components/EventEditor';
+import EventEditor from '../../../lib/components/admin/EventEditor';
 import Block from '../../../lib/components/admin/Block';
 import ColorPicker from '../../../lib/components/admin/ColorPicker';
 import Input from '../../../lib/components/admin/Input';
 import { withEvent } from '../../../lib/server/database/redis';
 import { redirectToRoot } from '../../../lib/server/types';
 import { settings } from '../../../lib/server/util';
-import { getUser } from '../../api/auth/token';
+import { getUser } from '../../../lib/server/google-api/token';
 
 export async function getServerSideProps(context: NextPageContext) {
     if (!(context.req && context.res)) return redirectToRoot;

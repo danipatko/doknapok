@@ -3,11 +3,11 @@ import Link from 'next/link';
 import { ReactElement } from 'react';
 import { EntityData } from 'redis-om';
 import Layout from '../../../lib/components/admin/Layout';
-import EventEditor from '../../../lib/components/EventEditor';
+import EventEditor from '../../../lib/components/admin/EventEditor';
 import { withEvent } from '../../../lib/server/database/redis';
 import { redirectToRoot } from '../../../lib/server/types';
 import { settings } from '../../../lib/server/util';
-import { getUser } from '../../api/auth/token';
+import { getUser } from '../../../lib/server/google-api/token';
 
 export async function getServerSideProps(context: NextPageContext) {
     if (!(context.req && context.res)) return redirectToRoot;
@@ -24,10 +24,10 @@ export async function getServerSideProps(context: NextPageContext) {
                 if (!id) return {};
                 const e = await repo.fetch(typeof id == 'string' ? id : id[0]);
                 if (!Object.keys(e.entityData).length) return {};
-                return e.entityData;
+                return { ...e.entityData, id: e.entityId };
             }),
-            block1: settings.block1,
-            block2: settings.block2,
+            block1: settings.preset.block1,
+            block2: settings.preset.block2,
         },
     };
 }
@@ -71,7 +71,9 @@ const AdminEvent = ({
                     </a>
                 </Link>
             </div>
-            <EventEditor block1={block1} block2={block2} mode='edit' values={event} />
+            <div className='flex justify-center min-h-[80vh] pb-20 items-center'>
+                <EventEditor block1={block1} block2={block2} mode='edit' values={event} />
+            </div>
         </>
     );
 };

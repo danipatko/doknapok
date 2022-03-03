@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import type { EntityData } from 'redis-om';
 import { withEvent } from '../../../../../lib/server/database/redis';
 import { settings } from '../../../../../lib/server/util';
-import { getUser } from '../../../auth/token';
+import { getUser } from '../../../../../lib/server/google-api/token';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method != 'GET') {
@@ -24,7 +24,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     block = typeof block == 'string' ? block : block[0];
-
     res.status(200).json(
         await withEvent(async (repo): Promise<{ events: EntityData[]; date: { start: string; end: string } }> => {
             await repo.createIndex();
@@ -46,7 +45,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                         color: x.entityData.color,
                     };
                 }),
-                date: block == '0' ? settings.block1 : settings.block2,
+                date: block == '0' ? settings.preset.block1 : settings.preset.block2,
             };
         })
     );

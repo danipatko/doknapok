@@ -1,5 +1,5 @@
 import { NextPageContext } from 'next';
-import { getID, getUser } from '../api/auth/token';
+import { getID, getUser } from '../../lib/server/google-api/token';
 import { IEvent, redirectToRoot, User } from '../../lib/server/types';
 import { withUser } from '../../lib/server/database/redis';
 import { ReactElement, useState } from 'react';
@@ -30,7 +30,7 @@ export async function getServerSideProps(ctx: NextPageContext) {
         };
     });
 
-    return { props: { stats, user: admin.entityData, settings: { deadline: settings.deadline } } };
+    return { props: { stats, user: admin.entityData, settings: { deadline: settings.preset.deadline } } };
 }
 
 const DashBoard = ({ stats, user, settings }: { stats: { userCount: number; dates: Date[] }; user: User; settings: { deadline: number } }) => {

@@ -1,8 +1,8 @@
 import Router from 'next/router';
 import { useEffect, useRef, useState } from 'react';
-import Block from './admin/Block';
-import ColorPicker from './admin/ColorPicker';
-import Input from './admin/Input';
+import Block from './Block';
+import ColorPicker from './ColorPicker';
+import Input from './Input';
 
 const EventEditor = ({
     values,
@@ -41,7 +41,7 @@ const EventEditor = ({
     const submit = async () => {
         setError('');
 
-        const values: { [key: string]: number | string | boolean } = {
+        const vals: { [key: string]: number | string | boolean } = {
             title: (document.getElementById('title') as HTMLInputElement).value,
             guest: (document.getElementById('guest') as HTMLInputElement).value,
             location: (document.getElementById('location') as HTMLInputElement).value,
@@ -51,16 +51,19 @@ const EventEditor = ({
             block: selectedBlock,
         };
 
-        for (const key in values) {
-            if (values[key] === undefined || !values[key].toString().length) {
+        for (const key in vals) {
+            if (vals[key] === undefined || !vals[key].toString().length) {
                 setError(`Kérlek töltsd ki a '${key}' mezőt is!`);
                 return;
             }
         }
 
-        const response = await fetch(`/api/admin/events/${mode}`, { method: 'POST', body: JSON.stringify(values) });
+        if (mode == 'edit' && values) vals['id'] = values.id;
+
+        const response = await fetch(`/api/admin/events/${mode}`, { method: 'POST', body: JSON.stringify(vals) });
         if (!response.ok) setError(`Váratlan hiba történt [${response.status}] ${response.statusText}`);
         const { error, ok } = await response.json();
+
         if (!ok || error) setError(error);
         Router.push('/admin');
     };
@@ -73,7 +76,7 @@ const EventEditor = ({
                 <Input id='guest' type='text' placeholder='Előadó' />
                 <Input id='location' type='text' placeholder='Helyszín' />
                 <Input id='capacity' type='number' placeholder='Férőhelyek' />
-                <ColorPicker />
+                <ColorPicker value={values?.color} />
                 <div className='p-2 col-span-2'>
                     <div className='text-zinc-400 text-sm'>Leírás</div>
                     <textarea
@@ -87,7 +90,7 @@ const EventEditor = ({
                     <Block block1={block1} block2={block2} onSelect={setBlock} selected={selectedBlock} />
                 </div>
             </div>
-            {error.length ? <div className='p-2 border-l-4 border-l-red-600 text-white text-lg'>{error}</div> : null}
+            {error?.length ? <div className='p-2 border-l-4 border-l-red-600 text-white text-lg'>{error}</div> : null}
             <div className='text-right'>
                 <button onClick={submit} className='p-2 rounded-md bg-fore hover:bg-fore-highlight text-white outline-none transition-colors'>
                     {mode == 'create' ? 'Hozzáadás' : 'Mentés'}

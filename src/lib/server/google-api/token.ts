@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import { getCookie, setCookies } from 'cookies-next';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { UserEntity, withUser } from '../../../lib/server/database/redis';
+import { UserEntity, withUser } from '../database/redis';
 import { IncomingMessage, ServerResponse } from 'http';
 
 // how long can an authenticated user stay logged in
