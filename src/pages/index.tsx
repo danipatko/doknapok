@@ -24,7 +24,6 @@ const Home = () => {
                         Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vel alias, soluta optio vero obcaecati sequi illo voluptates in
                         libero accusamus delectus numquam ullam rerum! Laudantium consectetur nesciunt iste tempora neque.
                     </section>
-
                     <div className='mt-10 md:mt-15 lg:mt-20 text-center'>
                         <a href={redirect} className='text-white p-2 bg-indigo-500 rounded-md hover:bg-indigo-400 transition-colors'>
                             Bejelentkezés
