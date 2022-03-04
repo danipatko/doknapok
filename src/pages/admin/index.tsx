@@ -9,6 +9,7 @@ import { settings } from '../../lib/server/util';
 import Events from '../../lib/components/admin/Events';
 import { useEvents } from '../../lib/hooks/blockHook';
 import Navitem from '../../lib/components/admin/Navitem';
+import Stats from '../../lib/components/admin/Stats';
 
 export async function getServerSideProps(ctx: NextPageContext) {
     if (!(ctx.req && ctx.res)) return redirectToRoot;
@@ -50,7 +51,7 @@ const DashBoard = ({ stats, user, settings }: { stats: { userCount: number; date
                 <title>Admin - DÖK napok</title>
             </Head>
             <div className='mt-2.5 flex justify-center items-center'>
-                <div className='w-[100vw] md:w-[80vw] lg:w-[70vw] xl:w-[50vw] p-2 md:p-0'>
+                <div className='w-[100vw] md:w-[90vw] lg:w-[80vw] xl:w-[60vw] p-2 md:p-0'>
                     <nav className='flex'>
                         <Navitem onClick={() => sel(0)} selected={selected} index={0}>
                             Dashboard
@@ -64,7 +65,10 @@ const DashBoard = ({ stats, user, settings }: { stats: { userCount: number; date
                     </nav>
                     <div className='mt-5'>
                         {selected == 0 ? (
-                            <div>{JSON.stringify(stats)}</div>
+                            <div>
+                                <div>{JSON.stringify(stats)}</div>
+                                <Stats />
+                            </div>
                         ) : (
                             <Events
                                 onRemove={(id) => (selected == 1 ? removeB1(id) : removeB2(id))}

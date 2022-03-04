@@ -9,6 +9,8 @@ import { redirectToRoot } from '../../../../lib/server/types';
 import { settings } from '../../../../lib/server/util';
 import { getUser } from '../../../../lib/server/google-api/token';
 import ExportCSV from '../../../../lib/components/admin/ExportCSV';
+import ConfirmRM from '../../../../lib/components/admin/ConfirmRM';
+import Userlist from '../../../../lib/components/admin/UserList';
 
 export async function getServerSideProps(context: NextPageContext) {
     if (!(context.req && context.res)) return redirectToRoot;
@@ -43,45 +45,6 @@ export async function getServerSideProps(context: NextPageContext) {
     };
 }
 
-const Userlist = ({ users, onExport }: { users: { name: string; email: string; class: string }[]; onExport: () => void }) => {
-    return (
-        <div className='mt-5 px-5 md:px-10 py-5 rounded-lg border border-zinc-200 dark:border-zinc-700 dark:bg-back-highlight'>
-            <div className='text-2xl mb-5'>Jelentkezők</div>
-            <div>
-                {!users.length ? (
-                    <div className='text-center text-zinc-400'>Még senki sem jelentkezett erre a programra</div>
-                ) : (
-                    <table className='table-auto w-full'>
-                        <thead className='border-b border-b-zinc-200 dark:border-b-zinc-600'>
-                            <tr className='text-left'>
-                                <th>Név</th>
-                                <th>Email</th>
-                                <th>Osztály</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {users.map((x, i) => {
-                                return (
-                                    <tr key={i} className={`${i % 2 ? 'bg-zinc-600' : ''}`}>
-                                        <td className='p-1'>{x.name}</td>
-                                        <td className='p-1'>{x.email}</td>
-                                        <td className='p-1'>{x.class}</td>
-                                    </tr>
-                                );
-                            })}
-                        </tbody>
-                    </table>
-                )}
-            </div>
-            <div className='mt-5'>
-                <button onClick={onExport} className='p-2 rounded-md bg-green-600 hover:bg-green-500 text-white'>
-                    Exportálás mint CSV
-                </button>
-            </div>
-        </div>
-    );
-};
-
 const AdminEvent = ({
     event,
     block1,
@@ -103,7 +66,16 @@ const AdminEvent = ({
     block1: { start: string; end: string };
     block2: { start: string; end: string };
 }) => {
-    const [shown, show] = useState<boolean>(false);
+    const [exportShown, showExport] = useState<boolean>(false);
+    const [removeShown, showRemove] = useState<boolean>(false);
+
+    const remove = async (id: string): Promise<void> => {
+        const res = await fetch(`/api/admin/events/remove`, { method: 'POST', body: JSON.stringify({ id }) });
+        if (!res.ok) {
+            console.log(`[${res.status}] ${res.statusText}`);
+            return;
+        }
+    };
 
     return Object.keys(event).length == 0 ? (
         <div className='h-[80vh] flex justify-center items-center text-lg'>
@@ -118,7 +90,8 @@ const AdminEvent = ({
         </div>
     ) : (
         <>
-            <ExportCSV id={event.id} onExit={() => show(false)} shown={shown} />
+            <ExportCSV id={event.id} onExit={() => showExport(false)} shown={exportShown} />
+            <ConfirmRM id={event.id} onExit={() => showRemove(false)} shown={removeShown} onRemove={remove} />
             <div className='p-5'>
                 <Link href='/admin'>
                     <a className='text-indigo-500 text-lg font-semibold hover:underline'>
@@ -128,8 +101,8 @@ const AdminEvent = ({
             </div>
             <div className='flex justify-center min-h-[80vh] pb-20 items-center'>
                 <div>
-                    <EventEditor block1={block1} block2={block2} mode='edit' values={event} />
-                    <Userlist users={users} onExport={() => show(true)} />
+                    <EventEditor onRemove={() => showRemove(true)} block1={block1} block2={block2} mode='edit' values={event} />
+                    <Userlist users={users} onExport={() => showExport(true)} />
                 </div>
             </div>
         </>

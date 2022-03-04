@@ -9,6 +9,7 @@ const EventEditor = ({
     mode,
     block1,
     block2,
+    onRemove,
 }: {
     values?: {
         [key: string]: boolean | string | number;
@@ -24,6 +25,7 @@ const EventEditor = ({
     mode: 'create' | 'edit';
     block1: { start: string; end: string };
     block2: { start: string; end: string };
+    onRemove: () => void;
 }) => {
     const [selectedBlock, selectBlock] = useState<boolean>(true);
     const setBlock = (b: boolean) => selectBlock(b);
@@ -94,7 +96,10 @@ const EventEditor = ({
                 </div>
             </div>
             {error?.length ? <div className='p-2 border-l-4 border-l-red-600 text-white text-lg'>{error}</div> : null}
-            <div className='text-right'>
+            <div className='flex gap-4 justify-end'>
+                <button onClick={onRemove} className='p-2 rounded-md select-none text-white bg-red-500 hover:bg-red-400'>
+                    Törlés
+                </button>
                 <button onClick={submit} className='p-2 rounded-md bg-fore hover:bg-fore-highlight text-white outline-none transition-colors'>
                     {mode == 'create' ? 'Hozzáadás' : 'Mentés'}
                 </button>

@@ -37,8 +37,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             .join('\n')
     );
 
-    console.log(csv);
-
     res.setHeader('Content-Type', 'application/csv');
     res.setHeader('Content-Disposition', `attachment; filename=${evt.entityData.title}.csv`);
     await pipeline(csv, res);
