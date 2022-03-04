@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { IEvent } from '../../server/types';
 import Overlay from '../shared/Overlay';
 import ConfirmRM from './ConfirmRM';
-import DatePick from './Datepick';
+import { TimePicker } from './Datepick';
 import Event from './Event';
 import ExportCSV from './ExportCSV';
 
@@ -61,7 +61,7 @@ const Events = ({
         <>
             <ExportCSV id={exportId} onExit={() => showExport(false)} shown={exportShown} />
             <ConfirmRM id={removeId} onExit={() => showDeleteConf(false)} onRemove={hideAndRemove} shown={deleteConfShown} />
-            <DatePick date={events.date} onSubmit={updateTime} />
+            <TimePicker date={events.date} onSubmit={updateTime} />
             <div className='mt-3 md:mt-7'>
                 <div className='text-lg flex border-b-zinc-200 dark:border-b-zinc-700 border-b justify-between p-2'>
                     <div>

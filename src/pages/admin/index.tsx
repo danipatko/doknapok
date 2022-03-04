@@ -2,7 +2,7 @@ import { NextPageContext } from 'next';
 import { getID, getUser } from '../../lib/server/google-api/token';
 import { IEvent, redirectToRoot, User } from '../../lib/server/types';
 import { withUser } from '../../lib/server/database/redis';
-import { ReactElement, useState } from 'react';
+import { ReactElement, useEffect, useState } from 'react';
 import Layout from '../../lib/components/admin/Layout';
 import Head from 'next/head';
 import { settings } from '../../lib/server/util';
@@ -10,6 +10,10 @@ import Events from '../../lib/components/admin/Events';
 import { useEvents } from '../../lib/hooks/blockHook';
 import Navitem from '../../lib/components/admin/Navitem';
 import Stats from '../../lib/components/admin/Stats';
+import { DatePicker } from '../../lib/components/admin/Datepick';
+import useDeadline from '../../lib/hooks/deadline';
+
+const MAX_GRAPH_DETAIL = 20; // length of returned items
 
 export async function getServerSideProps(ctx: NextPageContext) {
     if (!(ctx.req && ctx.res)) return redirectToRoot;
@@ -21,23 +25,29 @@ export async function getServerSideProps(ctx: NextPageContext) {
         await repo.createIndex();
 
         const userCount = await repo.search().where('admin').eq(false).count();
-        const usersDone = await repo.search().where('admin').eq(false).and('done').eq(true).returnAll();
+        const usersDone = (await repo.search().where('admin').eq(false).and('done').eq(true).all()).map((x) => x.entityData.donedate);
+
+        const doneCount = usersDone.length;
+        const target = usersDone.length > MAX_GRAPH_DETAIL ? MAX_GRAPH_DETAIL : usersDone.length;
+        const scale = Math.round(doneCount / target);
+
+        for (var i = 0; i < target; i += scale) if (i != usersDone.length - 1) usersDone.splice(i + 1, scale);
 
         return {
             userCount,
-            dates: usersDone.map((x) => {
-                return { date: x.entityData.donedate };
-            }),
+            doneCount,
+            dates: usersDone,
         };
     });
 
-    return { props: { stats, user: admin.entityData, settings: { deadline: settings.preset.deadline } } };
+    return { props: { stats, user: admin.entityData, deadline: settings.preset.deadline } };
 }
 
-const DashBoard = ({ stats, user, settings }: { stats: { userCount: number; dates: Date[] }; user: User; settings: { deadline: number } }) => {
+const DashBoard = ({ stats, user, deadline }: { stats: { userCount: number; doneCount: number; dates: number[] }; user: User; deadline: number }) => {
     const [selected, select] = useState<number>(0);
     const [block1, openB1, updateB1, removeB1] = useEvents(true); // first block
     const [block2, openB2, updateB2, removeB2] = useEvents(false); // second one
+    const [dl, setDeadline] = useDeadline(deadline);
 
     const sel = (index: number) => {
         if (index == 1) openB1();
@@ -66,8 +76,8 @@ const DashBoard = ({ stats, user, settings }: { stats: { userCount: number; date
                     <div className='mt-5'>
                         {selected == 0 ? (
                             <div>
-                                <div>{JSON.stringify(stats)}</div>
-                                <Stats />
+                                <DatePicker date={dl.date} time={dl.time} onSubmit={setDeadline} />
+                                <Stats {...stats} />
                             </div>
                         ) : (
                             <Events

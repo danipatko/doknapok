@@ -90,8 +90,10 @@ class Settings {
         this.saveSettings();
     }
 
-    public setDeadline(deadline: Date): void {
-        this.preset.deadline = deadline.getTime();
+    public setDeadline(deadline: number): void {
+        // cannot set deadline backwards
+        if (deadline < new Date().getTime()) return;
+        this.preset.deadline = deadline;
         this.saveSettings();
     }
 }
