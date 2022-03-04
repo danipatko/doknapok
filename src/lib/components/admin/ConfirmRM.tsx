@@ -1,4 +1,4 @@
-import Overlay from '../Overlay';
+import Overlay from '../shared/Overlay';
 
 const ConfirmRM = ({ id, onExit, onRemove, shown }: { id: string; onExit: () => void; onRemove: (id: string) => void; shown: boolean }) => {
     return (

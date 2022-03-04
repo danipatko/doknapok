@@ -1,13 +1,14 @@
 import { NextPageContext } from 'next';
 import Link from 'next/link';
-import { ReactElement } from 'react';
+import { ReactElement, useState } from 'react';
 import { EntityData } from 'redis-om';
-import Layout from '../../../lib/components/admin/Layout';
-import EventEditor from '../../../lib/components/admin/EventEditor';
-import { withEvent, withUser } from '../../../lib/server/database/redis';
-import { redirectToRoot } from '../../../lib/server/types';
-import { settings } from '../../../lib/server/util';
-import { getUser } from '../../../lib/server/google-api/token';
+import Layout from '../../../../lib/components/admin/Layout';
+import EventEditor from '../../../../lib/components/admin/EventEditor';
+import { withEvent, withUser } from '../../../../lib/server/database/redis';
+import { redirectToRoot } from '../../../../lib/server/types';
+import { settings } from '../../../../lib/server/util';
+import { getUser } from '../../../../lib/server/google-api/token';
+import ExportCSV from '../../../../lib/components/admin/ExportCSV';
 
 export async function getServerSideProps(context: NextPageContext) {
     if (!(context.req && context.res)) return redirectToRoot;
@@ -42,7 +43,7 @@ export async function getServerSideProps(context: NextPageContext) {
     };
 }
 
-const Userlist = ({ users }: { users: { name: string; email: string; class: string }[] }) => {
+const Userlist = ({ users, onExport }: { users: { name: string; email: string; class: string }[]; onExport: () => void }) => {
     return (
         <div className='mt-5 px-5 md:px-10 py-5 rounded-lg border border-zinc-200 dark:border-zinc-700 dark:bg-back-highlight'>
             <div className='text-2xl mb-5'>Jelentkezők</div>
@@ -72,6 +73,11 @@ const Userlist = ({ users }: { users: { name: string; email: string; class: stri
                     </table>
                 )}
             </div>
+            <div className='mt-5'>
+                <button onClick={onExport} className='p-2 rounded-md bg-green-600 hover:bg-green-500 text-white'>
+                    Exportálás mint CSV
+                </button>
+            </div>
         </div>
     );
 };
@@ -97,6 +103,8 @@ const AdminEvent = ({
     block1: { start: string; end: string };
     block2: { start: string; end: string };
 }) => {
+    const [shown, show] = useState<boolean>(false);
+
     return Object.keys(event).length == 0 ? (
         <div className='h-[80vh] flex justify-center items-center text-lg'>
             <div>
@@ -110,6 +118,7 @@ const AdminEvent = ({
         </div>
     ) : (
         <>
+            <ExportCSV id={event.id} onExit={() => show(false)} shown={shown} />
             <div className='p-5'>
                 <Link href='/admin'>
                     <a className='text-indigo-500 text-lg font-semibold hover:underline'>
@@ -120,7 +129,7 @@ const AdminEvent = ({
             <div className='flex justify-center min-h-[80vh] pb-20 items-center'>
                 <div>
                     <EventEditor block1={block1} block2={block2} mode='edit' values={event} />
-                    <Userlist users={users} />
+                    <Userlist users={users} onExport={() => show(true)} />
                 </div>
             </div>
         </>

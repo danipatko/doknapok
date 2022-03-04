@@ -69,3 +69,11 @@ export const withEvent = async <Type>(callback: (repo: Repository<IEventEntity>)
     await connect();
     return await callback(client.fetchRepository<IEventEntity>(ieventSchema));
 };
+
+/**
+ * Check if key exists in the database
+ */
+export const exists = async (key: string): Promise<boolean> => {
+    await connect();
+    return await client.execute<boolean>(['EXISTS', key]);
+};

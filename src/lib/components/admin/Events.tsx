@@ -1,10 +1,11 @@
 import Link from 'next/link';
 import { useState } from 'react';
 import { IEvent } from '../../server/types';
-import Overlay from '../Overlay';
+import Overlay from '../shared/Overlay';
 import ConfirmRM from './ConfirmRM';
 import DatePick from './Datepick';
 import Event from './Event';
+import ExportCSV from './ExportCSV';
 
 const Events = ({
     events,
@@ -23,11 +24,18 @@ const Events = ({
     onRemove: (id: string) => void;
 }) => {
     const [deleteConfShown, showDeleteConf] = useState<boolean>(false);
-    const [removeId, setRemoveId] = useState<string>(null as any);
+    const [removeId, setRemoveId] = useState<string>('');
+    const [exportShown, showExport] = useState<boolean>(false);
+    const [exportId, setExportId] = useState<string>('');
 
     const warnRemove = (id: string) => {
         setRemoveId(id);
         showDeleteConf(true);
+    };
+
+    const exportContext = (id: string) => {
+        setExportId(id);
+        showExport(true);
     };
 
     const hideAndRemove = (id: string) => {
@@ -51,6 +59,7 @@ const Events = ({
     if (events.loading) return <div className='h-[80vh] flex justify-center items-center animate-pulse'>Betöltés...</div>;
     return (
         <>
+            <ExportCSV id={exportId} onExit={() => showExport(false)} shown={exportShown} />
             <ConfirmRM id={removeId} onExit={() => showDeleteConf(false)} onRemove={hideAndRemove} shown={deleteConfShown} />
             <DatePick date={events.date} onSubmit={updateTime} />
             <div className='mt-3 md:mt-7'>
@@ -66,7 +75,7 @@ const Events = ({
                     </Link>
                 </div>
                 {events.events.map((x, i) => (
-                    <Event onDelete={warnRemove} key={i} data={x} />
+                    <Event onExport={(id) => exportContext(id)} onDelete={warnRemove} key={i} data={x} />
                 ))}
             </div>
         </>

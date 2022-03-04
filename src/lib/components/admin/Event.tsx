@@ -3,9 +3,11 @@ import Link from 'next/link';
 const Event = ({
     data,
     onDelete,
+    onExport,
 }: {
     data: { id: string; title: string; guest: string; location: string; color: string; capacity: number; occupied: number };
     onDelete: (id: string) => void;
+    onExport: (id: string) => void;
 }) => {
     return (
         <div
@@ -22,17 +24,18 @@ const Event = ({
                 </div>
             </div>
             <div className='flex items-center gap-2'>
-                <Link href={`/admin/events/${data.id}`}>
+                <div title='Exportálás CSV fájlként' onClick={() => onExport(data.id)}>
                     <div className='text-green-500 rounded-sm hover:dark:bg-zinc-700 hover:bg-zinc-200 text-lg py-1 px-3'>
                         <i className='fa-solid fa-file-csv'></i>
                     </div>
-                </Link>
+                </div>
                 <Link href={`/admin/events/${data.id}`}>
-                    <div className='text-indigo-500 rounded-sm hover:dark:bg-zinc-700 hover:bg-zinc-200 text-lg py-1 px-2'>
+                    <div title='Szerkesztés' className='text-indigo-500 rounded-sm hover:dark:bg-zinc-700 hover:bg-zinc-200 text-lg py-1 px-2'>
                         <i className='fa-solid fa-pen'></i>
                     </div>
                 </Link>
                 <div
+                    title='Törlés'
                     onClick={() => onDelete(data.id)}
                     className='text-red-500 rounded-sm hover:dark:bg-zinc-700 hover:bg-zinc-200 text-lg py-1 px-2.5 fa-solid fa-trash'
                 ></div>
