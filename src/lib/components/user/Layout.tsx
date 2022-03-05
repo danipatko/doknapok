@@ -16,7 +16,7 @@ const Layout = ({ children, userdata }: { children: any; userdata: { name: strin
     const [darkmode, setDarkmode] = useState(true);
 
     return (
-        <div className={`${darkmode ? 'dark bg-back text-white' : 'bg-white text-back'} h-screen`}>
+        <div className={`${darkmode ? 'dark bg-back text-white' : 'bg-white text-back'} min-h-screen`}>
             <Navbar onDarkmode={() => setDarkmode((x) => !x)} userdata={userdata} />
             <>{children}</>
         </div>

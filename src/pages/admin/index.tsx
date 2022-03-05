@@ -8,7 +8,7 @@ import Head from 'next/head';
 import { settings } from '../../lib/server/util';
 import Events from '../../lib/components/admin/Events';
 import { useEvents } from '../../lib/hooks/blockHook';
-import Navitem from '../../lib/components/admin/Navitem';
+import Navitem from '../../lib/components/shared/Navitem';
 import Stats from '../../lib/components/admin/Stats';
 import { DatePicker } from '../../lib/components/admin/Datepick';
 import useDeadline from '../../lib/hooks/deadline';
