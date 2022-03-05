@@ -1,0 +1,10 @@
+version: '3.9'
+services:
+    web:
+        build: .
+        ports:
+            - '3000:3000'
+    redis:
+        image: 'redislabs/redismod'
+        ports:
+            - '6379:6379'

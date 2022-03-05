@@ -3,12 +3,17 @@ import React, { ReactElement, useState } from 'react';
 import Deadline from '../lib/components/shared/Deadline';
 import Layout from '../lib/components/user/Layout';
 import Event from '../lib/components/Event';
-import Block from '../lib/components/Block';
 import Navitem from '../lib/components/shared/Navitem';
+import { settings } from '../lib/server/util';
+import { NextPageContext } from 'next';
 
 // TODO: import server-side rendering to use server time, fetch user data and programmes
 
-const Programok = () => {
+export async function getServerSideProps(context: NextPageContext) {
+    return { props: { deadline: settings.preset.deadline } };
+}
+
+const Programok = ({ deadline }: { deadline: number }) => {
     const [selected, select] = useState<number>(0);
 
     return (
@@ -16,7 +21,7 @@ const Programok = () => {
             <Head>
                 <title>Programok - Dök napok</title>
             </Head>
-            <Deadline time={Date.now()} />
+            <Deadline time={deadline} />
             <div className='mt-2.5 md:mt-5 lg:mt-10 flex justify-center items-center'>
                 <div className='md:w-[80vw] lg:w-[70vw] xl:w-[50vw] p-5 md:p-0'>
                     <nav className='flex'>
