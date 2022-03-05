@@ -1,10 +1,13 @@
-version: '3.9'
+version: '1.0'
 services:
     web:
-        build: .
+        build: app
         ports:
-            - '3000:3000'
+            - 3000:3000
+    nginx:
+        build: nginx
+        ports: 8000:80
     redis:
-        image: 'redislabs/redismod'
+        image: redislabs/redismod
         ports:
-            - '6379:6379'
+            - 6379:6379
