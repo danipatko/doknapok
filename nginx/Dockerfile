@@ -36,16 +36,15 @@ RUN mkdir /etc/nginx/modules && cp /opt/nginx-1.18.0/objs/ngx_http_modsecurity_m
 
 # Remove default ruleset
 RUN rm -rf /usr/share/modsecurity-crs && git clone https://github.com/coreruleset/coreruleset /usr/local/modsecurity-crs && \
-    mv /usr/local/modsecurity-crs/crs-setup.conf.example /usr/local/modsecurity-crs/crs-setup.conf && \
-    mv /usr/local/modsecurity-crs/rules/REQUEST-900-EXCLUSION-RULES-BEFORE-CRS.conf.example /usr/local/modsecurity-crs/rules/REQUEST-900-EXCLUSION-RULES-BEFORE-CRS.conf
+    mv /usr/local/modsecurity-crs/rules/REQUEST-900-EXCLUSION-RULES-BEFORE-CRS.conf.example /usr/local/modsecurity-crs/rules/REQUEST-900-EXCLUSION-RULES-BEFORE-CRS.conf && \
+    mv /usr/local/modsecurity-crs/crs-setup.conf.example /usr/local/modsecurity-crs/crs-setup.conf
 
 # Configure modsecurity
-RUN mkdir -p /etc/nginx/modsec && mkdir -p /etc/modsecurity && \
-    cp /opt/ModSecurity/unicode.mapping /etc/nginx/modsec && \
-    cp /opt/ModSecurity/modsecurity.conf-recommended /etc/nginx/modsec/modsecurity.conf
+RUN mkdir -p /etc/nginx/modsec && mkdir /etc/nginx/modsec/ModSecurity/ && \
+    cp /opt/ModSecurity/unicode.mapping /etc/nginx/modsec/ModSecurity/unicode.mapping
 
 # SecRuleEngine On
-COPY modsecurity.conf /etc/modsecurity/modsecurity.conf
+COPY modsecurity.conf /etc/nginx/modsec/modsecurity.conf
 # Includes
 COPY main.conf /etc/nginx/modsec/main.conf
 
