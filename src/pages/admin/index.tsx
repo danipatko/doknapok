@@ -1,8 +1,8 @@
 import { NextPageContext } from 'next';
-import { getID, getUser } from '../../lib/server/google-api/token';
-import { IEvent, redirectToRoot, User } from '../../lib/server/types';
+import { getUser } from '../../lib/server/google-api/token';
+import { redirectToRoot, User } from '../../lib/server/types';
 import { withUser } from '../../lib/server/database/redis';
-import { ReactElement, useEffect, useState } from 'react';
+import { ReactElement, useState } from 'react';
 import Layout from '../../lib/components/admin/Layout';
 import Head from 'next/head';
 import { settings } from '../../lib/server/util';

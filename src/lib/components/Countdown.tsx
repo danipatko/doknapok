@@ -23,13 +23,13 @@ const Countdown = () => {
         setRemaining(`Jelentkezési határidő: ${days} nap ${hours} óra ${minutes} perc ${seconds} mp`);
     }, 1000);
 
-    return (        
-        <div> 
-            {remaining == "LEJÁRT!" ? 
-                <div className='navItem animate-pulse px-2'>Jelentkezési határidő: {remaining}</div>
-                :
+    return (
+        <div>
+            {remaining == 'LEJÁRT!' ? (
+                <div className='navItem animate-pulse'>Jelentkezési határidő: {remaining}</div>
+            ) : (
                 <div className='navItem'>{remaining}</div>
-            }
+            )}
         </div>
     );
 };

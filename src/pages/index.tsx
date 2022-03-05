@@ -1,8 +1,8 @@
 import { ReactElement } from 'react';
 import { CLIENT_ID } from '../lib/server/env';
 import Head from 'next/head';
-import Layout from '../lib/components/home/Layout';
 import Deadline from '../lib/components/shared/Deadline';
+import Layout from '../lib/components/home/Layout';
 
 const redirect = `https://accounts.google.com/o/oauth2/v2/auth?scope=https%3A//www.googleapis.com/auth/userinfo.email&include_granted_scopes=true&response_type=code&redirect_uri=http%3A//localhost%3A3000/api/auth/redirect&client_id=${CLIENT_ID}`;
 
@@ -45,14 +45,14 @@ export default Home;
 /* 
 <div className='flex w-full h-full px-10 py-2'>
                 {block ? (
-                    <div className='flex flex-wrap flex-row w-full h-full gap-10 justify-center'>
+                    <div className='w-1/3 h-full gap-10 justify-center'>
                         <Event
                             cim='Ez egy kicsit hosszabb cím'
                             helyszin='1.34'
                             ferohelyek={16}
                             jelentkezok={12}
                             eloado='John Doe'
-                            leiras='Lorem ipsum dolor sit amet consectetur, adipisicing elit. Eum earum dolores pariatur quidem molestiae vitae, veniam aut'
+                            leiras='Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores adipisci veritatis magni tempora accusantium sequi libero molestiae culpa inventore, deserunt eveniet non exercitationem molestias labore quaerat nesciunt eum pariatur beatae?'
                             szin='#e8fc03'
                         />
                         <Event szin='#fc2c03' />
@@ -76,7 +76,7 @@ export default Home;
                         <Event szin='#b721cf' />
                     </div>
                 ) : (
-                    <div className='flex flex-wrap flex-row w-full h-full gap-10 justify-center'>
+                    <div className='w-1/3 h-full gap-10 justify-center'>
                         <Event szin='#0a8da1' />
                         <Event szin='#fc2c03' />
                         <Event szin='#229912' />
