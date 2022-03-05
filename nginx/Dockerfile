@@ -7,7 +7,7 @@ ENV TZ=Europe/Budapest
 # Update
 RUN apt-get update -y && apt-get upgrade -y 
 
-# Install nginx
+# Install and configure nginx
 RUN apt install -y nginx
 
 # Install/update dependencies 
@@ -31,30 +31,31 @@ RUN cd /opt && wget http://nginx.org/download/nginx-1.18.0.tar.gz && \
     ./configure --add-dynamic-module=../ModSecurity-nginx --with-cc-opt='-g -O2 -fdebug-prefix-map=/build/nginx-KTLRnK/nginx-1.18.0=. -fstack-protector-strong -Wformat -Werror=format-security -fPIC -Wdate-time -D_FORTIFY_SOURCE=2' --with-ld-opt='-Wl,-Bsymbolic-functions -Wl,-z,relro -Wl,-z,now -fPIC' --prefix=/usr/share/nginx --conf-path=/etc/nginx/nginx.conf --http-log-path=/var/log/nginx/access.log --error-log-path=/var/log/nginx/error.log --lock-path=/var/lock/nginx.lock --pid-path=/run/nginx.pid --modules-path=/usr/lib/nginx/modules --http-client-body-temp-path=/var/lib/nginx/body --http-fastcgi-temp-path=/var/lib/nginx/fastcgi --http-proxy-temp-path=/var/lib/nginx/proxy --http-scgi-temp-path=/var/lib/nginx/scgi --http-uwsgi-temp-path=/var/lib/nginx/uwsgi --with-debug --with-compat --with-pcre-jit --with-http_ssl_module --with-http_stub_status_module --with-http_realip_module --with-http_auth_request_module --with-http_v2_module --with-http_dav_module --with-http_slice_module --with-threads --with-http_addition_module --with-http_gunzip_module --with-http_gzip_static_module --with-http_image_filter_module=dynamic --with-http_sub_module --with-http_xslt_module=dynamic --with-stream=dynamic --with-stream_ssl_module --with-mail=dynamic --with-mail_ssl_module && \
     make modules
 
-RUN mkdir /etc/nginx/modules && cp /opt/nginx-1.18.0/objs/ngx_http_modsecurity_module.so /etc/nginx/modules
+RUN mkdir /etc/nginx/modules && cp /opt/nginx-1.18.0/objs/ngx_http_modsecurity_module.so /usr/share/nginx/modules/ && \
+    echo "load_module modules/ngx_http_modsecurity_module.so;" | cat - /etc/nginx/nginx.conf > temp && mv temp /etc/nginx/nginx.conf
 
 # Remove default ruleset
 RUN rm -rf /usr/share/modsecurity-crs && git clone https://github.com/coreruleset/coreruleset /usr/local/modsecurity-crs && \
     mv /usr/local/modsecurity-crs/crs-setup.conf.example /usr/local/modsecurity-crs/crs-setup.conf && \
     mv /usr/local/modsecurity-crs/rules/REQUEST-900-EXCLUSION-RULES-BEFORE-CRS.conf.example /usr/local/modsecurity-crs/rules/REQUEST-900-EXCLUSION-RULES-BEFORE-CRS.conf
 
-# COPY crs-setup.conf /usr/local/nginx/conf/rules/crs-setup.conf
-
 # Configure modsecurity
 RUN mkdir -p /etc/nginx/modsec && mkdir -p /etc/modsecurity && \
     cp /opt/ModSecurity/unicode.mapping /etc/nginx/modsec && \
-    cp /opt/ModSecurity/modsecurity.conf-recommended /etc/nginx/modsec/modsecurity.conf && \
-    cp /opt/ModSecurity/modsecurity.conf-recommended /etc/modsecurity/modsecurity.conf && \
-    touch /etc/nginx/modsec/main.conf
+    cp /opt/ModSecurity/modsecurity.conf-recommended /etc/nginx/modsec/modsecurity.conf
 
 # SecRuleEngine On
-COPY modsecurity.conf /usr/local/nginx/conf/modsecurity.conf
-
-# Includes
 COPY modsecurity.conf /etc/modsecurity/modsecurity.conf
+# Includes
 COPY main.conf /etc/nginx/modsec/main.conf
 
-COPY default /etc/nginx/sites-available/default
+COPY doknapok /etc/nginx/sites-available/doknapok
 
-CMD ["nginx"]
+RUN mkdir -p /var/www/doknapok && \
+    unlink /etc/nginx/sites-enabled/default && \
+    ln -s /etc/nginx/sites-available/doknapok /etc/nginx/sites-enabled/
+
+COPY default.html /var/www/doknapok/index.html
+
+CMD ["nginx", "-g", "daemon off;"]
 EXPOSE 80
