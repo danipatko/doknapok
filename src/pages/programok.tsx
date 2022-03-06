@@ -3,66 +3,60 @@ import React, { ReactElement, useState } from 'react';
 import Deadline from '../lib/components/shared/Deadline';
 import Layout from '../lib/components/user/Layout';
 import Event from '../lib/components/Event';
-import Block from '../lib/components/Block';
 import Navitem from '../lib/components/shared/Navitem';
 import { settings } from '../lib/server/util';
 import { NextPageContext } from 'next';
 import { redirectToRoot } from '../lib/server/types';
 import { getUser } from '../lib/server/google-api/token';
 import { EntityData } from 'redis-om';
-import { NextApiRequest, NextApiResponse } from 'next';
 import { withEvent } from '../lib/server/database/redis';
-
-// TODO: import server-side rendering to use server time, fetch user data and programmes
 
 export async function getServerSideProps(ctx: NextPageContext) {
     if (!(ctx.req && ctx.res)) return redirectToRoot;
 
     const user = await getUser(ctx.req, ctx.res, 'user');
-
+    console.log(user);
     if (!user) return redirectToRoot;
 
     return {
         props: {
-            userdata: user.entityData,
+            user: {
+                name: user.entityData.name,
+                email: user.entityData.email,
+                class: user.entityData.class,
+                picture: user.entityData.picture,
+                block1: user.entityData.block1,
+                block2: user.entityData.block2,
+            },
             deadline: settings.preset.deadline,
-            events: await withEvent(async (repo): Promise<{ block1: EntityData[]; block2: EntityData[] }> => {
+            events: await withEvent(async (repo): Promise<any> => {
                 await repo.createIndex();
                 return {
-                    block1: (await repo.search().where('block').eq(true).all()).map((x) => {
-                        return {
-                            title: x.entityData.title,
-                            guest: x.entityData.guest,
-                            capacity: x.entityData.capacity,
-                            occupied: x.entityData.occupied,
-                            location: x.entityData.location,
-                            color: x.entityData.color,
-                            description: x.entityData.description,
-                        };
-                    }),
-                    block2: (await repo.search().where('block').eq(false).all()).map((x) => {
-                        return {
-                            title: x.entityData.title,
-                            guest: x.entityData.guest,
-                            capacity: x.entityData.capacity,
-                            occupied: x.entityData.occupied,
-                            location: x.entityData.location,
-                            color: x.entityData.color,
-                            description: x.entityData.description,
-                        };
-                    }),
+                    block1: (await repo.search().where('block').eq(true).all()).map((x) => x.entityData),
+                    block2: (await repo.search().where('block').eq(false).all()).map((x) => x.entityData),
                 };
             }),
+            block1: settings.preset.block1,
+            block2: settings.preset.block2,
         },
     };
 }
 const Programok = ({
-    userdata,
+    user,
     deadline,
     events,
 }: {
     deadline: number;
-    userdata: { block1: string; block2: string };
+    block1: { start: string; end: string };
+    block2: { start: string; end: string };
+    user: {
+        name: string;
+        email: string;
+        class: string;
+        picture: string;
+        block1: string;
+        block2: string;
+    };
     events: { block1: EntityData[]; block2: EntityData[] };
 }) => {
     const [selected, select] = useState<number>(0);
@@ -124,7 +118,7 @@ const Programok = ({
 
 // this sets the default layout to the user one
 Programok.getLayout = (page: ReactElement) => {
-    return <Layout userdata={page.props.userdata}>{page}</Layout>;
+    return <Layout userdata={page.props.user}>{page}</Layout>;
 };
 
 // <Block onSelect={(first) => setBlock(first)} />

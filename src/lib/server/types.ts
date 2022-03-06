@@ -12,7 +12,7 @@ export type User = {
 
 export type IEvent = {
     title: string;
-    description: string;
+    description?: string;
     guest: string;
     location: string;
     color: string;

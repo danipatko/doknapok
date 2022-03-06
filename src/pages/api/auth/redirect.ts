@@ -7,7 +7,6 @@ import { setID } from '../../../lib/server/google-api/token';
  * This is the endpoint google sign-in redirects to
  * A successful redirect has a code and scope field with the user's authorization token
  * An unsuccessful one will have an error key in the query
- * TODO: save the id in a cookie
  */
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     const { code, error } = req.query;
@@ -26,5 +25,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     setID(id, admin ? true : false, req, res);
 
-    res.status(200).redirect('/programok');
+    setTimeout(() => res.status(200).redirect('/'), 1000);
 }
