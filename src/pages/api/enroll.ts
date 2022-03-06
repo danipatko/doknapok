@@ -9,7 +9,7 @@ export default async function updateUserEvent(req: NextApiRequest, res: NextApiR
         return;
     }
 
-    const user = await getUser(req, res, 'user');
+    const user = await getUser(req, res, 'any');
 
     if (!user) {
         res.status(403).send('unauthorized');
@@ -29,8 +29,13 @@ export default async function updateUserEvent(req: NextApiRequest, res: NextApiR
         return;
     }
 
+    if (id.includes('"')) {
+        res.status(403).send('invalid ID');
+        return;
+    }
+
     // check if event exists
-    if (!(await exists(`"IEvententity:${JSON.stringify(id)}"`))) {
+    if (!(await exists(`IEventEntity:${id}`))) {
         res.status(404).send('not found');
         return;
     }

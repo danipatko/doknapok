@@ -9,7 +9,7 @@ export default async function updateUserEvent(req: NextApiRequest, res: NextApiR
         return;
     }
 
-    const user = await getUser(req, res, 'user');
+    const user = await getUser(req, res, 'any');
 
     if (!user) {
         res.status(403).send('unauthorized');

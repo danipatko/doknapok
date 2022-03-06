@@ -47,7 +47,8 @@ export const useEvents = (data: {
         // move selected items to the front
         setState((s) => {
             s.events.block1.sort((a, b) => (a.id == s.selected1 ? -1 : b.id == s.selected1 ? 1 : 0));
-            s.events.block1.sort((a, b) => (a.id == s.selected1 ? -1 : b.id == s.selected1 ? 1 : 0));
+            s.events.block2.sort((a, b) => (a.id == s.selected2 ? -1 : b.id == s.selected2 ? 1 : 0));
+
             return s;
         });
     }, [setState]);
@@ -64,14 +65,20 @@ export const useEvents = (data: {
             // http errors
             if (!res.ok) {
                 setState((s) => {
-                    return { ...s, error: `Váratlan hiba történt (${res.status} - ${res.statusText})` };
+                    return { ...s, error: `Váratlan hiba történt (${res.status} - ${res.statusText})`, ongoing: false };
                 });
                 return;
             }
             // deadline expired
             const { ok, error } = await res.json();
             setState((s) => {
-                return !ok || error ? { ...s, error } : { ...s, ongoing: false };
+                s.ongoing = false;
+
+                if (!ok) s.error = error;
+                else if (block) s.selected1 = id;
+                else s.selected2 = id;
+
+                return { ...s };
             });
         });
     };
@@ -88,17 +95,19 @@ export const useEvents = (data: {
             // http errors
             if (!res.ok) {
                 setState((s) => {
-                    return { ...s, error: `Váratlan hiba történt (${res.status} - ${res.statusText})` };
+                    return { ...s, error: `Váratlan hiba történt (${res.status} - ${res.statusText})`, ongoing: false };
                 });
                 return;
             }
             // deadline expired
             const { ok, error } = await res.json();
-            if (!ok || error) {
-                setState((s) => {
-                    return { ...s, error };
-                });
-            }
+            setState((s) => {
+                return !ok || error
+                    ? { ...s, error, ongoing: false }
+                    : block
+                    ? { ...s, ongoing: false, selected1: '' }
+                    : { ...s, ongoing: false, selected2: '' };
+            });
         });
     };
 

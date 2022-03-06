@@ -1,7 +1,8 @@
 import Head from 'next/head';
-import React, { ReactElement, useEffect, useState } from 'react';
+import React, { ReactElement, useState } from 'react';
 import Deadline from '../lib/components/shared/Deadline';
 import Layout from '../lib/components/user/Layout';
+import Event from '../lib/components/user/Event';
 import Navitem from '../lib/components/shared/Navitem';
 import { settings } from '../lib/server/util';
 import { NextPageContext } from 'next';
@@ -52,71 +53,6 @@ export async function getServerSideProps(ctx: NextPageContext) {
     };
 }
 
-const Event = ({
-    data,
-    extended,
-    onClick,
-    selected,
-    onEnroll,
-}: {
-    data: IEvent;
-    extended: boolean;
-    selected: string;
-    onClick: () => void;
-    onEnroll: () => void;
-}) => {
-    return (
-        <div
-            onClick={onClick}
-            style={selected === data.id ? { borderColor: '#00ff00' } : { borderLeftColor: data.color }}
-            className='mt-3 hover:dark:border-zinc-500 hover:bg-zinc-200 dark:bg-back-highlight p-2 rounded-md border-l-[12px] border border-zinc-200 dark:border-zinc-700'
-        >
-            {!extended ? (
-                <>
-                    <div className='flex justify-between'>
-                        <div>
-                            <div className='text-lg font-semibold overflow-hidden'>{data.title}</div>
-                            <div>
-                                {data.guest} &#183; {data.location}
-                            </div>
-                        </div>
-                        <div className='flex items-center text-blue-500 font-bold'>
-                            {data.occupied}/{data.capacity}
-                        </div>
-                    </div>
-                    <div className='text-right'>
-                        <i className='fa-solid fa-angle-down'></i>
-                    </div>
-                </>
-            ) : (
-                <>
-                    <div className='text-lg font-semibold overflow-hidden'>{data.title}</div>
-                    <div className='py-2.5  text-base'>{data.description}</div>
-                    <div className='flex justify-between'>
-                        <div className='py-2 text-sm sm:text-base'>
-                            <div>
-                                <span className='text-zinc-400 dark:text-zinc-500'>Előadó:</span> {data.guest}
-                            </div>
-                            <div>
-                                <span className='text-zinc-400 dark:text-zinc-500'>Helyszín:</span> {data.location}
-                            </div>
-                            <div className=''>
-                                <span className='text-zinc-400 dark:text-zinc-500'>Szabad helyek:</span>{' '}
-                                <span className='text-blue-500 font-bold'>
-                                    {data.occupied}/{data.capacity}
-                                </span>
-                            </div>
-                        </div>
-                        <div className='flex items-end p-1'>
-                            <button className='rounded-md p-2 font-semibold text-white bg-green-500 hover:bg-green-400'>Jelentkezés</button>
-                        </div>
-                    </div>
-                </>
-            )}
-        </div>
-    );
-};
-
 const Programok = ({
     user,
     deadline,
@@ -140,8 +76,6 @@ const Programok = ({
     const [eventData, enroll, unenroll, block, setBlock] = useEvents({ events, block1, block2, selected1: user.block1, selected2: user.block2 });
     const [selected1, select1] = useState<number>(-1);
     const [selected2, select2] = useState<number>(-1);
-
-    const enunroll = () => {};
 
     return (
         <>
@@ -168,8 +102,10 @@ const Programok = ({
                             <div>
                                 {eventData.events.block1.map((x, i) => (
                                     <Event
-                                        onEnroll={() => {}}
-                                        selected={user.block1}
+                                        loadstate={eventData.ongoing}
+                                        onEnroll={enroll}
+                                        onCancel={unenroll}
+                                        selected={eventData.selected1}
                                         onClick={() => select1(i)}
                                         extended={selected1 == i}
                                         key={i}
@@ -181,8 +117,10 @@ const Programok = ({
                             <div>
                                 {eventData.events.block2.map((x, i) => (
                                     <Event
-                                        onEnroll={() => {}}
-                                        selected={user.block2}
+                                        loadstate={eventData.ongoing}
+                                        onEnroll={enroll}
+                                        onCancel={unenroll}
+                                        selected={eventData.selected2}
                                         onClick={() => select2(i)}
                                         extended={selected2 == i}
                                         key={i}
