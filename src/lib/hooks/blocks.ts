@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, StatelessComponent, useState } from 'react';
+import { Dispatch, SetStateAction, StatelessComponent, useEffect, useState } from 'react';
 import { IEvent } from '../server/types';
 
 // Custom hook for events
@@ -22,6 +22,7 @@ export const useEvents = (data: {
         selected1: string;
         selected2: string;
         error: string;
+        ongoing: boolean;
     },
     (id: string) => void,
     () => void,
@@ -39,14 +40,24 @@ export const useEvents = (data: {
         selected1: string;
         selected2: string;
         error: string;
-    }>({ ...data, error: '' });
+        ongoing: boolean;
+    }>({ ...data, error: '', ongoing: false });
+
+    useEffect(() => {
+        // move selected items to the front
+        setState((s) => {
+            s.events.block1.sort((a, b) => (a.id == s.selected1 ? -1 : b.id == s.selected1 ? 1 : 0));
+            s.events.block1.sort((a, b) => (a.id == s.selected1 ? -1 : b.id == s.selected1 ? 1 : 0));
+            return s;
+        });
+    }, [setState]);
 
     /**
      * Enroll to an event
      */
     const enroll = async (id: string) => {
         setState((s) => {
-            return { ...s, error: '' };
+            return { ...s, error: '', ongoing: true };
         });
 
         fetch(`/api/enroll`, { method: 'POST', body: JSON.stringify({ block, id }) }).then(async (res) => {
@@ -59,11 +70,9 @@ export const useEvents = (data: {
             }
             // deadline expired
             const { ok, error } = await res.json();
-            if (!ok || error) {
-                setState((s) => {
-                    return { ...s, error };
-                });
-            }
+            setState((s) => {
+                return !ok || error ? { ...s, error } : { ...s, ongoing: false };
+            });
         });
     };
 

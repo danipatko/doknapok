@@ -7,7 +7,7 @@ const getDiff = (diff: number): JSX.Element => {
         <>
             A jelentkezésből{' '}
             <b>
-                {conv.getUTCDate() - 1} nap {conv.getUTCHours() - 1} óra és {conv.getUTCMinutes() - 1} perc{' '}
+                {conv.getUTCDate() - 1} nap {conv.getUTCHours() - 1} óra és {conv.getUTCMinutes()} perc{' '}
             </b>{' '}
             van hátra
         </>

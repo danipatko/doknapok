@@ -63,13 +63,13 @@ const DashBoard = ({ stats, user, deadline }: { stats: { userCount: number; done
             <div className='mt-2.5 flex justify-center items-center'>
                 <div className='w-[100vw] md:w-[90vw] lg:w-[80vw] xl:w-[60vw] p-2 md:p-0'>
                     <nav className='flex'>
-                        <Navitem onClick={() => sel(0)} selected={selected} index={0}>
+                        <Navitem onClick={() => sel(0)} selected={selected == 0} index={0}>
                             Dashboard
                         </Navitem>
-                        <Navitem onClick={() => sel(1)} selected={selected} index={1}>
+                        <Navitem onClick={() => sel(1)} selected={selected == 1} index={1}>
                             Első blokk
                         </Navitem>
-                        <Navitem onClick={() => sel(2)} selected={selected} index={2}>
+                        <Navitem onClick={() => sel(2)} selected={selected == 2} index={2}>
                             Második blokk
                         </Navitem>
                     </nav>

@@ -3,14 +3,19 @@ import { login } from '../lib/server/env';
 import Head from 'next/head';
 import Deadline from '../lib/components/shared/Deadline';
 import Layout from '../lib/components/home/Layout';
+import { settings } from '../lib/server/util';
 
-const Home = () => {
+export async function getServerSideProps() {
+    return { props: { deadline: settings.preset.deadline } };
+}
+
+const Home = ({ deadline }: { deadline: number }) => {
     return (
         <>
             <Head>
                 <title>Dök napok</title>
             </Head>
-            <Deadline time={Date.now()} />
+            <Deadline time={deadline} />
             <div className='mt-2.5 md:mt-5 lg:mt-10 flex justify-center items-center'>
                 <div className='md:w-[80vw] lg:w-[70vw] xl:w-[50vw] p-5 md:p-0'>
                     <h1 className='text-xl md:text-2xl'>Hogyan jelentkezek?</h1>

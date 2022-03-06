@@ -18,7 +18,7 @@ export type IEvent = {
     color: string;
     capacity: number;
     occupied: number;
-    block: number;
+    block: boolean;
     id: string;
 };
 
