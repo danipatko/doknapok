@@ -2,15 +2,18 @@
 
 # dependencies
 /app/node_modules
-/app/.pnp
-/app.pnp.js
+node_modules
+app/.pnp
+app.pnp.js
 
 # testing
-/app/coverage
+app/coverage
 
 # next.js
 app/.next/
+.next/
 app/out/
+out/
 
 # production
 app/build
@@ -31,9 +34,14 @@ app/.env.local
 app/.env.development.local
 app/.env.test.local
 app/.env.production.local
-
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
 # vercel
 app/.vercel
 
 # typescript
 app/*.tsbuildinfo
+node_modules
