@@ -92,7 +92,7 @@ class Settings {
 
     public setDeadline(deadline: number): void {
         // cannot set deadline backwards
-        if (deadline < new Date().getTime()) return;
+        if (deadline < Date.now()) return;
         this.preset.deadline = deadline;
         this.saveSettings();
     }

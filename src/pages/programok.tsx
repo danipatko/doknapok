@@ -138,7 +138,7 @@ const Programok = ({
 
 // this sets the default layout to the user one
 Programok.getLayout = (page: ReactElement) => {
-    return <Layout userdata={page.props.user}>{page}</Layout>;
+    return <Layout userData={page.props.user}>{page}</Layout>;
 };
 
 // <Block onSelect={(first) => setBlock(first)} />

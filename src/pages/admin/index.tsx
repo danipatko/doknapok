@@ -24,14 +24,18 @@ export async function getServerSideProps(ctx: NextPageContext) {
     const stats = await withUser(async (repo) => {
         await repo.createIndex();
 
-        const userCount = await repo.search().where('admin').eq(false).count();
-        const usersDone = (await repo.search().where('admin').eq(false).and('done').eq(true).all()).map((x) => x.entityData.donedate);
+        // Ignore admin
+        const userCount = await repo.search().count();
+        const usersDone = (await repo.search().and('done').eq(true).all()).map((x) => x.entityData.donedate);
 
         const doneCount = usersDone.length;
         const target = usersDone.length > MAX_GRAPH_DETAIL ? MAX_GRAPH_DETAIL : usersDone.length;
         const scale = Math.round(doneCount / target);
 
-        for (var i = 0; i < target; i += scale) if (i != usersDone.length - 1) usersDone.splice(i + 1, scale);
+        console.log(usersDone);
+
+        if (usersDone.length < MAX_GRAPH_DETAIL)
+            for (var i = 0; i < target; i += scale) if (i != usersDone.length - 1) usersDone.splice(i + 1, scale);
 
         return {
             userCount,

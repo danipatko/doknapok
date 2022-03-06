@@ -17,7 +17,7 @@ const userSchema = new Schema(UserEntity, {
     admin: { type: 'boolean' },
     block1: { type: 'string' },
     block2: { type: 'string' },
-    donedate: { type: 'date' },
+    donedate: { type: 'number' },
     done: { type: 'boolean' },
 });
 

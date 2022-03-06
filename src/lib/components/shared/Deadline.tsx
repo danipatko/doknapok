@@ -19,9 +19,9 @@ const useDeadline = (deadline: Date): JSX.Element => {
     const [state, setState] = useState<JSX.Element>(null as any);
 
     useEffect(() => {
-        setState(getDiff(deadline.getTime() - new Date().getTime()));
+        setState(getDiff(deadline.getTime() - Date.now()));
         setInterval(() => {
-            setState(getDiff(deadline.getTime() - new Date().getTime()));
+            setState(getDiff(deadline.getTime() - Date.now()));
         }, 60_000);
     }, [setState]);
 

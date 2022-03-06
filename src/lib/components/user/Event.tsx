@@ -14,7 +14,7 @@ const Event = ({
     selected: string;
     onClick: () => void;
     onEnroll: (id: string) => void;
-    onCancel: () => void;
+    onCancel: (id: string) => void;
     loadstate: boolean;
 }) => {
     return (
@@ -71,7 +71,7 @@ const Event = ({
                         <div className='flex items-end p-1'>
                             <button
                                 style={loadstate ? { opacity: '50%' } : {}}
-                                onClick={() => (selected === data.id ? onCancel() : onEnroll(data.id))}
+                                onClick={() => (selected === data.id ? onCancel(data.id) : onEnroll(data.id))}
                                 className={`rounded-md p-2 font-semibold text-white ${
                                     selected === data.id ? 'bg-red-500 hover:bg-red-400' : 'bg-green-500 hover:bg-green-400'
                                 }`}

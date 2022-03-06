@@ -25,7 +25,7 @@ export const useEvents = (data: {
         ongoing: boolean;
     },
     (id: string) => void,
-    () => void,
+    (id: string) => void,
     boolean,
     Dispatch<SetStateAction<boolean>>
 ] => {
@@ -48,8 +48,7 @@ export const useEvents = (data: {
         setState((s) => {
             s.events.block1.sort((a, b) => (a.id == s.selected1 ? -1 : b.id == s.selected1 ? 1 : 0));
             s.events.block2.sort((a, b) => (a.id == s.selected2 ? -1 : b.id == s.selected2 ? 1 : 0));
-
-            return s;
+            return { ...s };
         });
     }, [setState]);
 
@@ -72,13 +71,11 @@ export const useEvents = (data: {
             // deadline expired
             const { ok, error } = await res.json();
             setState((s) => {
-                s.ongoing = false;
-
                 if (!ok) s.error = error;
                 else if (block) s.selected1 = id;
                 else s.selected2 = id;
 
-                return { ...s };
+                return { ...s, ongoing: false };
             });
         });
     };
@@ -86,12 +83,12 @@ export const useEvents = (data: {
     /**
      * Enroll to an event
      */
-    const unenroll = async () => {
+    const unenroll = async (id: string) => {
         setState((s) => {
-            return { ...s, error: '' };
+            return { ...s, error: '', ongoing: true };
         });
 
-        fetch(`/api/unenroll`, { method: 'POST', body: JSON.stringify({ block }) }).then(async (res) => {
+        fetch(`/api/unenroll`, { method: 'POST', body: JSON.stringify({ block, id }) }).then(async (res) => {
             // http errors
             if (!res.ok) {
                 setState((s) => {
@@ -102,11 +99,11 @@ export const useEvents = (data: {
             // deadline expired
             const { ok, error } = await res.json();
             setState((s) => {
-                return !ok || error
-                    ? { ...s, error, ongoing: false }
-                    : block
-                    ? { ...s, ongoing: false, selected1: '' }
-                    : { ...s, ongoing: false, selected2: '' };
+                if (!ok) s.error = error;
+                else if (block) s.selected1 = '';
+                else s.selected2 = '';
+
+                return { ...s, ongoing: false };
             });
         });
     };

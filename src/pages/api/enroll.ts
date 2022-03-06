@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { exists, withUser } from '../../lib/server/database/redis';
+import { exists, withEvent, withUser } from '../../lib/server/database/redis';
 import { getUser } from '../../lib/server/google-api/token';
 import { settings } from '../../lib/server/util';
 
@@ -10,40 +10,48 @@ export default async function updateUserEvent(req: NextApiRequest, res: NextApiR
     }
 
     const user = await getUser(req, res, 'any');
-
     if (!user) {
         res.status(403).send('unauthorized');
         return;
     }
 
     const { id, block } = JSON.parse(req.body);
-
     if (!(id && block !== undefined)) {
         res.status(400).send('bad request');
         return;
     }
 
     // check deadline
-    if (new Date().getTime() > settings.preset.deadline) {
+    if (Date.now() > settings.preset.deadline) {
         res.json({ error: `A jelentkezés véget ért.` });
         return;
     }
 
-    if (id.includes('"')) {
-        res.status(403).send('invalid ID');
-        return;
-    }
+    // fetch and check event
+    const evt = await withEvent((repo) => repo.fetch(id));
 
-    // check if event exists
-    if (!(await exists(`IEventEntity:${id}`))) {
+    if (!Object.keys(evt.entityData).length) {
         res.status(404).send('not found');
         return;
     }
 
+    if (evt.entityData.occupied >= evt.entityData.capacity) {
+        res.json({ error: `Ez a program már betelt.` });
+        return;
+    }
+
+    // increment occupied
+    (evt.entityData.occupied as number)++;
+    await withEvent((repo) => repo.save(evt));
+
     // update
     await withUser(async (repo) => {
         user.entityData[block ? 'block1' : 'block2'] = id;
-        repo.save(user);
+        if (user.entityData.block1 && user.entityData.block2) {
+            user.entityData.done = true;
+            user.entityData.donedate = Date.now();
+        }
+        await repo.save(user);
     });
 
     res.status(200).json({ ok: true });
