@@ -1,3 +1,1 @@
-// google oauth2 client id (can be accessed publicly)
-// exported from here due to pages being unable to read dotenv
-export const CLIENT_ID: string = `376810441368-i4c50kf9eha7217ctiir8eg32795ik9t.apps.googleusercontent.com`;
+export const login = `https://accounts.google.com/o/oauth2/v2/auth?scope=https%3A//www.googleapis.com/auth/userinfo.email%20https%3A//www.googleapis.com/auth/userinfo.profile&include_granted_scopes=true&response_type=code&redirect_uri=http%3A//localhost%3A3000/api/auth/redirect&client_id=376810441368-i4c50kf9eha7217ctiir8eg32795ik9t.apps.googleusercontent.com`;

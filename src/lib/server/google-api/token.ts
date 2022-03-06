@@ -29,7 +29,10 @@ export const getID = (
  * Sign a JWT token with the user ID
  */
 export const setID = (id: string, admin: boolean, req: NextApiRequest, res: NextApiResponse): void => {
-    if (!process.env.JWT_SECRET) return;
+    if (!process.env.JWT_SECRET) {
+        console.error(`JWT secret not found in environment.`);
+        return;
+    }
     const token = jwt.sign(admin ? { ad: id } : { id }, process.env.JWT_SECRET, { expiresIn: AUTH_TIME_STR });
     setCookies('token', token, { req, res, maxAge: AUTH_TIME_SEC });
 };

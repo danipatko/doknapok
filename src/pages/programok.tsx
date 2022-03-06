@@ -2,21 +2,75 @@ import Head from 'next/head';
 import React, { ReactElement, useState } from 'react';
 import Deadline from '../lib/components/shared/Deadline';
 import Layout from '../lib/components/user/Layout';
-import Event from '../lib/components/Event';
-import Block from '../lib/components/Block';
 import Navitem from '../lib/components/shared/Navitem';
+import { settings } from '../lib/server/util';
+import { NextPageContext } from 'next';
+import { IEvent, redirectToRoot } from '../lib/server/types';
+import { getUser } from '../lib/server/google-api/token';
+import { withEvent } from '../lib/server/database/redis';
+import { useEvents } from '../lib/hooks/blocks';
+import { login } from '../lib/server/env';
 
-// TODO: import server-side rendering to use server time, fetch user data and programmes
+export async function getServerSideProps(ctx: NextPageContext) {
+    if (!(ctx.req && ctx.res)) return redirectToRoot;
 
-const Programok = () => {
+    // check logged in
+    const user = await getUser(ctx.req, ctx.res, 'any');
+    if (!user) return login;
+
+    return {
+        props: {
+            user: {
+                name: user.entityData.name,
+                email: user.entityData.email,
+                class: user.entityData.class,
+                picture: user.entityData.picture,
+                block1: user.entityData.block1 ?? null,
+                block2: user.entityData.block2 ?? null,
+            },
+            deadline: settings.preset.deadline,
+            events: await withEvent(async (repo): Promise<any> => {
+                await repo.createIndex();
+                return {
+                    block1: (await repo.search().where('block').eq(true).all()).map((x) => x.entityData),
+                    block2: (await repo.search().where('block').eq(false).all()).map((x) => x.entityData),
+                };
+            }),
+            block1: settings.preset.block1,
+            block2: settings.preset.block2,
+        },
+    };
+}
+
+const Programok = ({
+    user,
+    deadline,
+    events,
+    block1,
+    block2,
+}: {
+    deadline: number;
+    block1: { start: string; end: string };
+    block2: { start: string; end: string };
+    user: {
+        name: string;
+        email: string;
+        class: string;
+        picture: string;
+        block1: string;
+        block2: string;
+    };
+    events: { block1: IEvent[]; block2: IEvent[] };
+}) => {
     const [selected, select] = useState<number>(0);
+    const [eventData, enroll, unenroll, block, setBlock] = useEvents({ events, block1, block2, selected1: user.block1, selected2: user.block2 });
 
     return (
         <>
             <Head>
                 <title>Programok - Dök napok</title>
             </Head>
-            <Deadline time={Date.now()} />
+            <Deadline time={deadline} />
             <div className='mt-2.5 md:mt-5 lg:mt-10 flex justify-center items-center'>
                 <div className='md:w-[80vw] lg:w-[70vw] xl:w-[50vw] p-5 md:p-0'>
                     <nav className='flex'>
@@ -27,63 +81,7 @@ const Programok = () => {
                             Második blokk
                         </Navitem>
                     </nav>
-                    <div>
-                        {selected == 0 ? (
-                            <>
-                                <Event
-                                    cim='Ez egy kicsit hosszabb cím'
-                                    helyszin='1.34'
-                                    ferohelyek={16}
-                                    jelentkezok={12}
-                                    eloado='John Doe'
-                                    leiras='Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores adipisci veritatis magni tempora accusantium sequi libero molestiae culpa inventore, deserunt eveniet non exercitationem molestias labore quaerat nesciunt eum pariatur beatae?'
-                                    szin='#e8fc03'
-                                />
-                                <Event szin='#fc2c03' />
-                                <Event szin='#229912' />
-                                <Event szin='#063d35' />
-                                <Event szin='#fc2c03' />
-                                <Event szin='#229912' />
-                                <Event szin='#063d35' />
-                                <Event szin='#0a8da1' />
-                                <Event szin='#0a8da1' />
-                                <Event szin='#092794' />
-                                <Event szin='#4c2f8f' />
-                                <Event szin='#b721cf' />
-                                <Event szin='#0a8da1' />
-                                <Event szin='#092794' />
-                                <Event szin='#4c2f8f' />
-                                <Event szin='#b721cf' />
-                                <Event szin='#0a8da1' />
-                                <Event szin='#092794' />
-                                <Event szin='#4c2f8f' />
-                                <Event szin='#b721cf' />
-                            </>
-                        ) : (
-                            <>
-                                <Event szin='#0a8da1' />
-                                <Event szin='#fc2c03' />
-                                <Event szin='#229912' />
-                                <Event szin='#063d35' />
-                                <Event szin='#fc2c03' />
-                                <Event szin='#229912' />
-                                <Event szin='#063d35' />
-                                <Event szin='#0a8da1' />
-                                <Event szin='#0a8da1' />
-                                <Event szin='#092794' />
-                                <Event szin='#4c2f8f' />
-                                <Event szin='#b721cf' />
-                                <Event szin='#0a8da1' />
-                                <Event szin='#092794' />
-                                <Event szin='#4c2f8f' />
-                                <Event szin='#b721cf' />
-                                <Event szin='#0a8da1' />
-                                <Event szin='#092794' />
-                                <Event szin='#4c2f8f' />
-                                <Event szin='#b721cf' />
-                            </>
-                        )}
-                    </div>
+                    <div></div>
                 </div>
             </div>
         </>
@@ -92,7 +90,7 @@ const Programok = () => {
 
 // this sets the default layout to the user one
 Programok.getLayout = (page: ReactElement) => {
-    return <Layout userdata={{ class: '10F', name: 'Patkó Dániel', picture: '' }}>{page}</Layout>;
+    return <Layout userdata={page.props.user}>{page}</Layout>;
 };
 
 // <Block onSelect={(first) => setBlock(first)} />

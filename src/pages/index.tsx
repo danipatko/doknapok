@@ -1,10 +1,8 @@
 import { ReactElement } from 'react';
-import { CLIENT_ID } from '../lib/server/env';
+import { login } from '../lib/server/env';
 import Head from 'next/head';
 import Deadline from '../lib/components/shared/Deadline';
 import Layout from '../lib/components/home/Layout';
-
-const redirect = `https://accounts.google.com/o/oauth2/v2/auth?scope=https%3A//www.googleapis.com/auth/userinfo.email&include_granted_scopes=true&response_type=code&redirect_uri=http%3A//localhost%3A3000/api/auth/redirect&client_id=${CLIENT_ID}`;
 
 const Home = () => {
     return (
@@ -25,7 +23,7 @@ const Home = () => {
                         libero accusamus delectus numquam ullam rerum! Laudantium consectetur nesciunt iste tempora neque.
                     </section>
                     <div className='mt-10 md:mt-15 lg:mt-20 text-center'>
-                        <a href={redirect} className='text-white p-2 bg-indigo-500 rounded-md hover:bg-indigo-400 transition-colors'>
+                        <a href={login} className='text-white p-2 bg-indigo-500 rounded-md hover:bg-indigo-400 transition-colors'>
                             Bejelentkezés
                         </a>
                     </div>

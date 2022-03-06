@@ -94,7 +94,6 @@ export const createUser = async (code: string): Promise<{ ok: boolean; id: strin
 
     // create user
     return await withUser(async (repo): Promise<{ ok: boolean; id: string; admin?: boolean }> => {
-        // 01FWVFEEX1JF1FWPKNPZAHFF7T
         await repo.createIndex();
         const admin = ADMIN_EMAILS.includes(data.email);
 
@@ -115,6 +114,8 @@ export const createUser = async (code: string): Promise<{ ok: boolean; id: strin
         });
 
         const id = await repo.save(en);
+
+        console.log(`CREATE USER ${id}`);
 
         // else create record in database
         return { ok: true, id, admin };
