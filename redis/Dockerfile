@@ -1,0 +1,4 @@
+FROM arm64v8/redis
+
+COPY redis.conf /usr/local/etc/redis/redis.conf
+CMD [ "redis-server", "/usr/local/etc/redis/redis.conf" ]

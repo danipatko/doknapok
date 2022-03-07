@@ -4,8 +4,21 @@ import Head from 'next/head';
 import Deadline from '../lib/components/shared/Deadline';
 import Layout from '../lib/components/home/Layout';
 import { settings } from '../lib/server/util';
+import { NextPageContext } from 'next';
+import { getUser } from '../lib/server/google-api/token';
 
-export async function getServerSideProps() {
+export async function getServerSideProps(ctx: NextPageContext) {
+    if (!(ctx.req && ctx.res)) return;
+
+    // if logged in, redirect to programok
+    if (await getUser(ctx.req, ctx.res, 'any'))
+        return {
+            redirect: {
+                destination: '/programok',
+                permanent: false,
+            },
+        };
+
     return { props: { deadline: settings.preset.deadline } };
 }
 

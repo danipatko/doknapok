@@ -36,8 +36,8 @@ const Event = ({
                 <>
                     <div className='flex justify-between'>
                         <div>
-                            <div className='text-lg font-semibold overflow-hidden'>{data.title}</div>
-                            <div>
+                            <div className='text-base md:text-lg font-semibold overflow-hidden'>{data.title}</div>
+                            <div className='text-sm'>
                                 {data.guest} &#183; {data.location}
                             </div>
                         </div>
@@ -51,8 +51,8 @@ const Event = ({
                 </>
             ) : (
                 <>
-                    <div className='text-lg font-semibold overflow-hidden'>{data.title}</div>
-                    <div className='py-2.5  text-base break-words'>{data.description}</div>
+                    <div className='text-base md:text-lg font-semibold overflow-hidden'>{data.title}</div>
+                    <div className='py-2.5 text-sm md:text-base break-words'>{data.description}</div>
                     <div className='flex justify-between'>
                         <div className='py-2 text-sm sm:text-base'>
                             <div>

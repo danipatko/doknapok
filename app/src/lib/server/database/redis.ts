@@ -1,7 +1,5 @@
 import { Schema, Entity, Repository, Client } from 'redis-om';
-
-// Note: in docker compose, this value may be 'redis://redis:6379'
-const REDIS_URL = process.env.DB_HOST ?? 'redis://redis:6379';
+import { REDIS_HOST } from '../env';
 
 const client = new Client();
 
@@ -38,7 +36,7 @@ const ieventSchema = new Schema(IEventEntity, {
 export const connect = async (): Promise<void> => {
     while (!client.isOpen()) {
         console.log('Connecting to database ...');
-        await client.open(REDIS_URL);
+        await client.open(REDIS_HOST);
     }
 };
 

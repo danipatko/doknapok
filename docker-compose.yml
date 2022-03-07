@@ -18,7 +18,7 @@ services:
             - app-network
 
     redis:
-        image: redislabs/redismod
+        image: arm64v8/redis
         ports:
             - 6379:6379
         expose:
