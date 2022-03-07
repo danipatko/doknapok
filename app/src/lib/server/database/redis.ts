@@ -1,7 +1,7 @@
 import { Schema, Entity, Repository, Client } from 'redis-om';
 
 // Note: in docker compose, this value may be 'redis://redis:6379'
-const REDIS_URL = process.env.DB_HOST ?? 'redis://127.0.0.1:6379';
+const REDIS_URL = 'redis://redis:6379';
 
 const client = new Client();
 

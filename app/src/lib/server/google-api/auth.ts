@@ -20,7 +20,7 @@ const fetchAccessToken = async (code: string): Promise<undefined | { access_toke
         code,
         client_id: process.env.CLIENT_ID,
         client_secret: process.env.CLIENT_SECRET,
-        redirect_uri: 'http://localhost:3000/api/auth/redirect',
+        redirect_uri: 'http://localhost/api/auth/redirect',
         grant_type: 'authorization_code',
     }).toString()}`;
 
