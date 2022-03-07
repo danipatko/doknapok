@@ -18,7 +18,8 @@ services:
             - app-network
 
     redis:
-        image: arm64v8/redis
+        build:
+            context: ./redis
         ports:
             - 6379:6379
         expose:
