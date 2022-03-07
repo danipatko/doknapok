@@ -9,7 +9,7 @@ const useDeadline = (deadline: number): [{ date: string; time: string }, (date: 
             date: d.toISOString().substring(0, 10),
             time: d.toLocaleTimeString(),
         });
-    }, [setState]);
+    }, [setState, deadline]);
 
     const setDeadline = async (date: string, time: string) => {
         const res = await fetch('/api/admin/events/block/deadline', {

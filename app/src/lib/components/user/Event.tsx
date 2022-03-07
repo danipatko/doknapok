@@ -52,7 +52,7 @@ const Event = ({
             ) : (
                 <>
                     <div className='text-lg font-semibold overflow-hidden'>{data.title}</div>
-                    <div className='py-2.5  text-base'>{data.description}</div>
+                    <div className='py-2.5  text-base break-words'>{data.description}</div>
                     <div className='flex justify-between'>
                         <div className='py-2 text-sm sm:text-base'>
                             <div>

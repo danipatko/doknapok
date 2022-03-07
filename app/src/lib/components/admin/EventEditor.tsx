@@ -38,7 +38,7 @@ const EventEditor = ({
             else if (key == 'description') (document.getElementById(key) as HTMLTextAreaElement).innerText = values[key].toString();
             else (document.getElementById(key) as HTMLInputElement)?.setAttribute('value', values[key].toString());
         }
-    }, [selectBlock]);
+    }, [selectBlock, values]);
 
     const submit = async () => {
         setError('');

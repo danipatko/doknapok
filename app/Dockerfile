@@ -4,9 +4,11 @@ WORKDIR /app
 
 COPY package*.json .
 
-RUN npm i
-# RUN npm ci --only=production
+# RUN npm i
+RUN npm ci --only=production && npm i --save-dev typescript @types/react @types/node
 
 COPY . .
 
-CMD ["npm", "run", "dev"]
+RUN npm run build
+
+CMD ["npm", "run", "start"]

@@ -1,4 +1,4 @@
-import jwt from 'jsonwebtoken';
+import jwt, { JsonWebTokenError } from 'jsonwebtoken';
 import { getCookie, setCookies } from 'cookies-next';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { UserEntity, withUser } from '../database/redis';
@@ -21,8 +21,12 @@ export const getID = (
     const token = getCookie('token', { req, res }) as string | undefined;
     if (!token) return;
 
-    const payload = jwt.verify(token, process.env.JWT_SECRET) as jwt.JwtPayload;
-    return restrict == 'user' ? payload.id : restrict == 'admin' ? payload.ad : payload.id ?? payload.ad;
+    try {
+        const payload = jwt.verify(token, process.env.JWT_SECRET) as jwt.JwtPayload;
+        return restrict == 'user' ? payload.id : restrict == 'admin' ? payload.ad : payload.id ?? payload.ad;
+    } catch {
+        return undefined;
+    }
 };
 
 /**

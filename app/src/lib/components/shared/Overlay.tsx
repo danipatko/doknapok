@@ -7,7 +7,7 @@ const Overlay = ({ children, shown, onExit }: { children: any; shown: boolean; o
         ov.current.onclick = (e) => {
             if (ov.current === (e.target as HTMLDivElement)) onExit();
         };
-    }, []);
+    }, [onExit]);
 
     return (
         <div

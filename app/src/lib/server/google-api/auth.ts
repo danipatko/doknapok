@@ -1,5 +1,6 @@
 import { withUser } from '../database/redis';
 import { getClass } from '../util';
+import { origin } from '../env';
 
 // Restrict allowed login domains to this specific one (leave undefined to accept all)
 const RESTRICT_DOMAIN: string | undefined = undefined; // 'szlgbp.hu';
