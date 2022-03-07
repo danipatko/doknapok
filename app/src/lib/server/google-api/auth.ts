@@ -4,6 +4,7 @@ import { getClass } from '../util';
 // Restrict allowed login domains to this specific one (leave undefined to accept all)
 const RESTRICT_DOMAIN: string | undefined = undefined; // 'szlgbp.hu';
 const ADMIN_EMAILS: string[] = ['patko.daniel.19f@szlgbp.hu'];
+const REDIRECT_URI: string = 'http://localhost/api/auth/redirect';
 
 /**
  * Step 2 of the authentication flow
@@ -20,7 +21,7 @@ const fetchAccessToken = async (code: string): Promise<undefined | { access_toke
         code,
         client_id: process.env.CLIENT_ID,
         client_secret: process.env.CLIENT_SECRET,
-        redirect_uri: 'http://localhost/api/auth/redirect',
+        redirect_uri: REDIRECT_URI,
         grant_type: 'authorization_code',
     }).toString()}`;
 
