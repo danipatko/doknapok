@@ -1,11 +1,9 @@
 services:
-    node:
+    app:
         build:
             context: ./app
         ports:
             - 3000:3000
-        networks:
-            - app-network
 
     nginx:
         build:
@@ -13,20 +11,19 @@ services:
         ports:
             - '80:80'
         depends_on:
-            - 'node'
-        networks:
-            - app-network
+            - 'app'
+        extra_hosts:
+            - "host.docker.internal:host-gateway"
 
     redis:
         build:
             context: ./redis
         ports:
-            - 6379:6379
+            - '6379:6379'
         expose:
             - 6379
-        networks:
-            - app-network
+              # command: ["redis-server", "--bind", "redis", "/usr/local/etc/redis/redis.conf"]
+              # networks:
+              # shared-network:
+              # driver: bridge
 
-networks:
-    app-network:
-        driver: bridge
