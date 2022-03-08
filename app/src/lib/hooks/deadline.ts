@@ -12,6 +12,7 @@ const useDeadline = (deadline: number): [{ date: string; time: string }, (date: 
     }, [setState, deadline]);
 
     const setDeadline = async (date: string, time: string) => {
+        console.log(new Date(`${date} ${time}`).getTime());
         const res = await fetch('/api/admin/events/block/deadline', {
             method: 'POST',
             body: JSON.stringify({

@@ -32,8 +32,6 @@ export async function getServerSideProps(ctx: NextPageContext) {
         const target = usersDone.length > MAX_GRAPH_DETAIL ? MAX_GRAPH_DETAIL : usersDone.length;
         const scale = Math.round(doneCount / target);
 
-        console.log(usersDone);
-
         if (usersDone.length < MAX_GRAPH_DETAIL)
             for (var i = 0; i < target; i += scale) if (i != usersDone.length - 1) usersDone.splice(i + 1, scale);
 
