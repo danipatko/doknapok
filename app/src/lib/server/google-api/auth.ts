@@ -3,7 +3,7 @@ import { getClass } from '../util';
 import { origin } from '../env';
 
 // Restrict allowed login domains to this specific one (leave undefined to accept all)
-const RESTRICT_DOMAIN: string | undefined = undefined; // 'szlgbp.hu';
+const RESTRICT_DOMAIN: string = 'szlgbp.hu';
 const ADMIN_EMAILS: string[] = ['patko.daniel.19f@szlgbp.hu'];
 
 /**
@@ -90,8 +90,8 @@ export const createUser = async (code: string): Promise<{ ok: boolean; id: strin
     const data = await fetchUserInfo(creds);
     if (!data) return { ok: false, id: 'Failed to fetch user information' };
 
-    if (RESTRICT_DOMAIN && data.hd != RESTRICT_DOMAIN)
-        return { ok: false, id: `Error: given e-mail address domain (${data.hd}) does not match '${RESTRICT_DOMAIN}'` };
+    // check szlg domain
+    if (data.hd != RESTRICT_DOMAIN) return { ok: false, id: `Error: given e-mail address domain (${data.hd}) does not match '${RESTRICT_DOMAIN}'` };
 
     // create user
     return await withUser(async (repo): Promise<{ ok: boolean; id: string; admin?: boolean }> => {
@@ -115,8 +115,6 @@ export const createUser = async (code: string): Promise<{ ok: boolean; id: strin
         });
 
         const id = await repo.save(en);
-
-        console.log(`CREATE USER ${id}`);
 
         // else create record in database
         return { ok: true, id, admin };

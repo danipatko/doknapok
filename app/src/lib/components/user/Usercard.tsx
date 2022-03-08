@@ -10,7 +10,7 @@ const Usercard = ({ class: _class, name, picture }: { name: string; picture: str
         >
             <Image alt='profile image' className='rounded-full' src={picture} width='32px' height='32px' />
             <div className='font-semibold'>
-                {name} {_class.toUpperCase()}
+                {name} {_class?.toUpperCase()}
             </div>
         </a>
     );
