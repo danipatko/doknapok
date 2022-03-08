@@ -84,7 +84,7 @@ const Programok = ({
             </Head>
             <Deadline time={deadline} />
             <div className='text-center text-sm md:text-base lg:text-lg l p-2 md:p-4 lg:p-5'>
-                {eventData.selected1.length && eventData.selected1.length
+                {eventData.selected1?.length && eventData.selected1?.length
                     ? 'Nincs más teendőd, kész vagy.'
                     : 'Válassz minkét időpontból egy-egy neked tetsző programot!'}
             </div>
@@ -95,7 +95,7 @@ const Programok = ({
                             <span>
                                 {block1.start} - {block1.end}
                             </span>
-                            {!eventData.selected1.length ? (
+                            {!eventData.selected1?.length ? (
                                 <span className='absolute top-0 right-0 flex h-3 w-3 '>
                                     <span className='animate-ping absolute h-full w-full rounded-full bg-red-500'></span>
                                 </span>
@@ -105,14 +105,14 @@ const Programok = ({
                             <span>
                                 {block2.start} - {block2.end}
                             </span>
-                            {!eventData.selected2.length ? (
+                            {!eventData.selected2?.length ? (
                                 <span className='absolute top-0 right-0 flex h-3 w-3 '>
                                     <span className='animate-ping absolute h-full w-full rounded-full bg-red-500'></span>
                                 </span>
                             ) : null}
                         </Navitem>
                     </nav>
-                    {eventData.error.length ? <div className='p-2 bg-red-500'>{eventData.error}</div> : null}
+                    {eventData.error?.length ? <div className='p-2 bg-red-500'>{eventData.error}</div> : null}
                     <div className='p-1'>
                         {block ? (
                             <div>
