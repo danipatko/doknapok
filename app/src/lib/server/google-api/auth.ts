@@ -4,7 +4,7 @@ import { origin } from '../env';
 
 // Restrict allowed login domains to this specific one (leave undefined to accept all)
 const RESTRICT_DOMAIN: string = 'szlgbp.hu';
-const ADMIN_EMAILS: string[] = ['patko.daniel.19f@szlgbp.hu'];
+const ADMIN_EMAILS: string[] = ['patko.daniel.19f@szlgbp.hu', 'cservak.andrea@szlgbp.hu', 'botragyi.gergo.19f@szlgbp.hu', 'molnar.attila@szlgbp.hu'];
 
 /**
  * Step 2 of the authentication flow
