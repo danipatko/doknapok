@@ -7,7 +7,7 @@ const getDiff = (diff: number): JSX.Element => {
         <>
             A jelentkezésből{' '}
             <b>
-                {conv.getUTCDate() - 1} nap {conv.getUTCHours() - 1} óra és {conv.getUTCMinutes()} perc{' '}
+                {conv.getUTCDate()} nap {conv.getUTCHours()} óra és {conv.getUTCMinutes()} perc{' '}
             </b>{' '}
             van hátra
         </>
@@ -30,12 +30,7 @@ const useDeadline = (deadline: Date): JSX.Element => {
 
 const Deadline = ({ time }: { time: number }) => {
     const deadline = useDeadline(new Date(time));
-
-    return (
-        <div className='p-2 text-center w-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white text-sm md:text-base'>
-            {deadline}
-        </div>
-    );
+    return <div className='p-2 text-center w-full bg-fore text-white text-sm md:text-base'>{deadline}</div>;
 };
 
 export default Deadline;

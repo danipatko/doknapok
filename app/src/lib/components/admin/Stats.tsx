@@ -88,7 +88,7 @@ const Stats = ({ dates: _dates, doneCount, userCount }: { dates: number[]; doneC
                 <div className='p-2'>Jelentkezett: {doneCount}</div>
                 <div className='p-2 grow'>
                     <div className='bg-zinc-400'>
-                        <div style={{ width: `${(doneCount / userCount) * 100}%` }} className='h-2 bg-indigo-500'></div>
+                        <div style={{ width: `${(doneCount / userCount) * 100}%` }} className='h-2 bg-fore'></div>
                     </div>
                 </div>
                 <div className='p-2'>Regisztrált: {userCount}</div>

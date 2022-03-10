@@ -27,7 +27,7 @@ const ExportCSV = ({ id, onExit, shown }: { id: string; onExit: () => void; show
                     />
                 </div>
                 <div className='flex justify-evenly mt-5'>
-                    <button onClick={onExit} className='bg-indigo-500 text-white p-2 rounded-md hover:bg-indigo-400'>
+                    <button onClick={onExit} className='bg-fore text-white p-2 rounded-md hover:bg-fore-highlight'>
                         Mégse
                     </button>
                     <a

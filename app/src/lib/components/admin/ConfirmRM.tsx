@@ -6,7 +6,7 @@ const ConfirmRM = ({ id, onExit, onRemove, shown }: { id: string; onExit: () => 
             <div className='bg-white dark:bg-back-highlight p-5 rounded-md'>
                 <div className='text-xl mb-4'>Biztosan törli ezt az elemet?</div>
                 <div className='flex justify-evenly'>
-                    <button onClick={onExit} className='bg-indigo-500 text-white p-2 rounded-md hover:bg-indigo-400'>
+                    <button onClick={onExit} className='bg-fore text-white p-2 rounded-md hover:bg-fore-highlight'>
                         Mégse
                     </button>
                     <button onClick={() => onRemove(id)} className='bg-red-500 text-white p-2 rounded-md hover:bg-red-400'>

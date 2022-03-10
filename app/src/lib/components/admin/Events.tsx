@@ -69,12 +69,12 @@ const Events = ({
                 <div className='text-lg flex border-b-zinc-200 dark:border-b-zinc-700 border-b justify-between p-2'>
                     <div>
                         Programok
-                        <span onClick={onUpdate} className='pl-3 select-none text-sm font-semibold text-indigo-400 cursor-pointer'>
+                        <span onClick={onUpdate} className='pl-3 select-none text-sm font-semibold text-fore cursor-pointer'>
                             <i className='hover:animate-spin fa-solid fa-arrows-rotate'></i> Frissítés
                         </span>
                     </div>
                     <Link href='/admin/events/create'>
-                        <a className='font-semibold text-indigo-400 hover:underline select-none'>+ Hozzáadás</a>
+                        <a className='font-semibold text-fore hover:underline select-none'>+ Hozzáadás</a>
                     </Link>
                 </div>
                 {events.events.map((x, i) => (

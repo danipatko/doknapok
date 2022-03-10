@@ -25,7 +25,7 @@ const CreateEvent = ({ block1, block2 }: { block1: { start: string; end: string 
             </Head>
             <div className='p-5'>
                 <Link href='/admin'>
-                    <a className='text-indigo-500 text-lg font-semibold hover:underline'>
+                    <a className='text-fore text-lg font-semibold hover:underline'>
                         <i className='fa fa-arrow-left'></i> Vissza
                     </a>
                 </Link>

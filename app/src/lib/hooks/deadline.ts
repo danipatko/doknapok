@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 const useDeadline = (
     deadline: number,
-    updateCallback: (s: string, ok: boolean) => void
+    alrt: (s: string, ok: boolean) => void
 ): [{ date: string; time: string }, (date: string, time: string) => void] => {
     const [state, setState] = useState<{ date: string; time: string }>({ date: '', time: '' });
 
@@ -10,14 +10,11 @@ const useDeadline = (
         const d = new Date(deadline);
         setState({
             date: d.toISOString().substring(0, 10),
-            time: d.toLocaleTimeString(),
+            time: d.toISOString().substring(11, 16), // fix for firefox
         });
     }, [setState, deadline]);
 
     const setDeadline = async (date: string, time: string) => {
-        // TODO: handle firefox
-        console.log(new Date(`${date} ${time}`).getTime());
-
         const res = await fetch('/api/admin/events/block/deadline', {
             method: 'POST',
             body: JSON.stringify({
@@ -25,11 +22,11 @@ const useDeadline = (
             }),
         });
         if (!res.ok) {
-            updateCallback(`[${res.status}] ${res.statusText}`, false);
+            alrt(`[${res.status}] ${res.statusText}`, false);
             return;
         }
         setState({ date, time });
-        updateCallback('Változtatások elmentve', true);
+        alrt('Változtatások elmentve', true);
     };
 
     return [state, setDeadline];

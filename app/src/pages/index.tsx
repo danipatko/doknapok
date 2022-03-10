@@ -31,17 +31,20 @@ const Home = ({ deadline }: { deadline: number }) => {
             <Deadline time={deadline} />
             <div className='mt-2.5 md:mt-5 lg:mt-10 flex justify-center items-center'>
                 <div className='md:w-[80vw] lg:w-[70vw] xl:w-[50vw] p-5 md:p-0'>
-                    <h1 className='text-xl md:text-2xl'>Hogyan jelentkezek?</h1>
+                    <h1 className='text-xl md:text-2xl'>Kedves Tanuló!</h1>
                     <section className='my-5 md:my-10 text-base md:text-lg'>
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vel alias, soluta optio vero obcaecati sequi illo voluptates in
-                        libero accusamus delectus numquam ullam rerum! Laudantium consectetur nesciunt iste tempora neque.
+                        Ezen az oldalon kell jelentkezz a DÖK napon rendezett előadásokra! Az oldalra úgy tudsz belépni, hogy az alábbi bejelentkezés
+                        gombon bejelentkezel az szlg-s email címeddel. A főoldalon fölül látni fogod a két időpontot amikor az előadások meg lesznek
+                        tartva.
                     </section>
                     <section className='my-5 md:my-10 text-base md:text-lg'>
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vel alias, soluta optio vero obcaecati sequi illo voluptates in
-                        libero accusamus delectus numquam ullam rerum! Laudantium consectetur nesciunt iste tempora neque.
+                        Az előadásoknál látni fogod, a címét, hogy ki tartja, hol lesz megrendezve, és a maximális férőhelyek közül hány van már
+                        betelve. Érdemes nem sokat várni a jelentkezésekkel, hiszen ha egy előadásra minden hely betelt, több diák már nem tud rá
+                        jelentkezni. A férőhelyek alatt látni fogsz egy nyilat, arra kattintva megjelenik az előadás leírása is, és a jelentkezés
+                        gomb. Kérlek jelentkezz mindkét időpontból egy-egy előadásra. Ha ezel kész vagy, nincs több teendőd.
                     </section>
                     <div className='mt-10 md:mt-15 lg:mt-20 text-center'>
-                        <a href={login} className='text-white p-2 bg-indigo-500 rounded-md hover:bg-indigo-400 transition-colors'>
+                        <a href={login} className='text-white p-2 bg-fore rounded-md hover:bg-fore-highlight transition-colors'>
                             Bejelentkezés
                         </a>
                     </div>

@@ -84,13 +84,13 @@ const Programok = ({
             </Head>
             <Deadline time={deadline} />
             <div className='text-center text-sm md:text-base lg:text-lg l p-2 md:p-4 lg:p-5'>
-                {eventData.selected1?.length && eventData.selected1?.length
+                {eventData.selected1?.length && eventData.selected2?.length
                     ? 'Nincs más teendőd, kész vagy.'
                     : 'Válassz minkét időpontból egy-egy neked tetsző programot!'}
             </div>
             <div className='flex justify-center items-center'>
                 <div className='w-[100vw] md:w-[80vw] lg:w-[70vw] xl:w-[50vw] md:p-0'>
-                    <nav className='flex'>
+                    <nav className='flex overflow-x-hidden'>
                         <Navitem onClick={() => setBlock(true)} selected={block} index={0}>
                             <span>
                                 {block1.start} - {block1.end}
