@@ -13,7 +13,7 @@ services:
         depends_on:
             - 'app'
         extra_hosts:
-            - "host.docker.internal:host-gateway"
+            - 'host.docker.internal:host-gateway'
 
     redis:
         build:
@@ -22,8 +22,3 @@ services:
             - '6379:6379'
         expose:
             - 6379
-              # command: ["redis-server", "--bind", "redis", "/usr/local/etc/redis/redis.conf"]
-              # networks:
-              # shared-network:
-              # driver: bridge
-

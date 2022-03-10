@@ -12,6 +12,7 @@ const Events = ({
     selected,
     onUpdate,
     onRemove,
+    alrt,
 }: {
     events: {
         events: IEvent[];
@@ -22,6 +23,7 @@ const Events = ({
     selected: number;
     onUpdate: () => void;
     onRemove: (id: string) => void;
+    alrt: (s: string, ok: boolean) => void;
 }) => {
     const [deleteConfShown, showDeleteConf] = useState<boolean>(false);
     const [removeId, setRemoveId] = useState<string>('');
@@ -46,14 +48,15 @@ const Events = ({
     const updateTime = async (date: { start: string; end: string }) => {
         const res = await fetch('/api/admin/events/block/setdate', { method: 'POST', body: JSON.stringify({ ...date, block: selected == 1 }) });
         if (!res.ok) {
-            console.log(`[${res.status}] ${res.statusText}`);
+            alrt(`Váratlan hiba történt - [${res.status}] ${res.statusText}`, false);
             return;
         }
         if (!(await res.json()).ok) {
-            console.error('An error occured when setting time');
+            alrt(`Váratlan hiba történt`, false);
             return;
         }
         events.date = date;
+        alrt('Változtatások mentve', true);
     };
 
     if (events.loading) return <div className='h-[80vh] flex justify-center items-center animate-pulse'>Betöltés...</div>;

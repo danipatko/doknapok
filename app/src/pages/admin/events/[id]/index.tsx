@@ -11,6 +11,7 @@ import { getUser } from '../../../../lib/server/google-api/token';
 import ExportCSV from '../../../../lib/components/admin/ExportCSV';
 import ConfirmRM from '../../../../lib/components/admin/ConfirmRM';
 import Userlist from '../../../../lib/components/admin/UserList';
+import Head from 'next/head';
 
 export async function getServerSideProps(context: NextPageContext) {
     if (!(context.req && context.res)) return redirectToRoot;
@@ -83,18 +84,21 @@ const AdminEvent = ({
                 <div className='text-xl'>Program nem található.</div>
                 <div className='p-2 text-center'>
                     <Link href='/admin'>
-                        <a className='text-indigo-500 font-semibold hover:underline'>Vissza</a>
+                        <a className='text-fore font-semibold hover:underline'>Vissza</a>
                     </Link>
                 </div>
             </div>
         </div>
     ) : (
         <>
+            <Head>
+                <title>{event.title} - Szerkesztés</title>
+            </Head>
             <ExportCSV id={event.id} onExit={() => showExport(false)} shown={exportShown} />
             <ConfirmRM id={event.id} onExit={() => showRemove(false)} shown={removeShown} onRemove={remove} />
             <div className='p-5'>
                 <Link href='/admin'>
-                    <a className='text-indigo-500 text-lg font-semibold hover:underline'>
+                    <a className='text-fore text-lg font-semibold hover:underline'>
                         <i className='fa fa-arrow-left'></i> Vissza
                     </a>
                 </Link>

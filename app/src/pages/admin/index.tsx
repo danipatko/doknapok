@@ -12,6 +12,8 @@ import Navitem from '../../lib/components/shared/Navitem';
 import Stats from '../../lib/components/admin/Stats';
 import { DatePicker } from '../../lib/components/admin/Datepick';
 import useDeadline from '../../lib/hooks/deadline';
+import usePopup from '../../lib/hooks/popup';
+import Popup from '../../lib/components/shared/Popup';
 
 const MAX_GRAPH_DETAIL = 20; // length of returned items
 
@@ -46,10 +48,11 @@ export async function getServerSideProps(ctx: NextPageContext) {
 }
 
 const DashBoard = ({ stats, user, deadline }: { stats: { userCount: number; doneCount: number; dates: number[] }; user: User; deadline: number }) => {
+    const [shown, message, ok, alrt, setShown] = usePopup({ hideafter: 4000 });
     const [selected, select] = useState<number>(0);
     const [block1, openB1, updateB1, removeB1] = useEvents(true); // first block
     const [block2, openB2, updateB2, removeB2] = useEvents(false); // second one
-    const [dl, setDeadline] = useDeadline(deadline);
+    const [dl, setDeadline] = useDeadline(deadline, alrt);
 
     const sel = (index: number) => {
         if (index == 1) openB1();
@@ -60,7 +63,7 @@ const DashBoard = ({ stats, user, deadline }: { stats: { userCount: number; done
     return (
         <>
             <Head>
-                <title>Admin - DÖK napok</title>
+                <title>Dashboard - DÖK napok</title>
             </Head>
             <div className='mt-2.5 flex justify-center items-center'>
                 <div className='w-[100vw] md:w-[90vw] lg:w-[80vw] xl:w-[60vw] p-2 md:p-0'>
@@ -83,6 +86,7 @@ const DashBoard = ({ stats, user, deadline }: { stats: { userCount: number; done
                             </div>
                         ) : (
                             <Events
+                                alrt={alrt}
                                 onRemove={(id) => (selected == 1 ? removeB1(id) : removeB2(id))}
                                 selected={selected}
                                 onUpdate={() => (selected == 1 ? updateB1() : updateB2())}
@@ -92,6 +96,7 @@ const DashBoard = ({ stats, user, deadline }: { stats: { userCount: number; done
                     </div>
                 </div>
             </div>
+            <Popup message={message} ok={ok} onClick={() => setShown(false)} shown={shown} />
         </>
     );
 };

@@ -6,6 +6,7 @@ import EventEditor from '../../../lib/components/admin/EventEditor';
 import { redirectToRoot } from '../../../lib/server/types';
 import { settings } from '../../../lib/server/util';
 import { getUser } from '../../../lib/server/google-api/token';
+import Head from 'next/head';
 
 export async function getServerSideProps(context: NextPageContext) {
     if (!(context.req && context.res)) return redirectToRoot;
@@ -19,6 +20,9 @@ export async function getServerSideProps(context: NextPageContext) {
 const CreateEvent = ({ block1, block2 }: { block1: { start: string; end: string }; block2: { start: string; end: string } }) => {
     return (
         <>
+            <Head>
+                <title>Új program létrehozása</title>
+            </Head>
             <div className='p-5'>
                 <Link href='/admin'>
                     <a className='text-indigo-500 text-lg font-semibold hover:underline'>

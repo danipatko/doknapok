@@ -14,8 +14,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return;
     }
 
-    console.log(req.body);
-
     const { deadline } = JSON.parse(req.body);
     if (!deadline) {
         res.status(400).send('missing field deadline in request body');
@@ -23,6 +21,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     settings.setDeadline(deadline);
-
     res.status(200).json({ ok: true });
 }

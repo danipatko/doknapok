@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import stream from 'stream';
 import { promisify } from 'util';
-import { exists, withEvent, withUser } from '../../../../lib/server/database/redis';
+import { withEvent, withUser } from '../../../../lib/server/database/redis';
 import { getUser } from '../../../../lib/server/google-api/token';
 
 const pipeline = promisify(stream.pipeline);
@@ -21,7 +21,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const evt = await withEvent(async (repo) => repo.fetch(id));
     if (!Object.keys(evt.entityData).length) {
-        console.log('does not exist');
         res.status(404).send('not found');
         return;
     }
@@ -29,7 +28,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     // generate CSV string
     const csv = await withUser(async (repo) =>
         (
-            await repo.search().where('admin').eq(false).and('block1').eq(id).or('block2').eq(id).all()
+            await repo.search().where('block1').eq(id).or('block2').eq(id).all()
         )
             .map((x) => {
                 return `${x.entityData.name}${separator}${x.entityData.email}${separator}${x.entityData.class}`;
