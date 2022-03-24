@@ -41,7 +41,8 @@ export default async function updateUserEvent(req: NextApiRequest, res: NextApiR
     }
 
     // increment occupied
-    (evt.entityData.occupied as number)++;
+    const occ = await withUser((repo) => repo.search().where('block1').eq(id).or('block2').eq(id).count());
+    evt.entityData.occupied = occ + 1;
     await withEvent((repo) => repo.save(evt));
 
     // update

@@ -46,10 +46,6 @@ export const TimePicker = ({
 };
 
 export const DatePicker = ({ date, time, onSubmit }: { date: string; time: string; onSubmit: (date: string, time: string) => void }) => {
-    useEffect(() => {
-        console.log(time);
-    });
-
     const submit = async () => {
         onSubmit((document.getElementById('date') as HTMLInputElement).value, (document.getElementById('time') as HTMLInputElement).value);
     };

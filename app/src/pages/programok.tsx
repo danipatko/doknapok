@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import React, { ReactElement, useState } from 'react';
+import React, { ReactElement, useEffect, useState } from 'react';
 import Deadline from '../lib/components/shared/Deadline';
 import Layout from '../lib/components/user/Layout';
 import Event from '../lib/components/user/Event';
@@ -76,6 +76,10 @@ const Programok = ({
     const [eventData, enroll, unenroll, block, setBlock] = useEvents({ events, block1, block2, selected1: user.block1, selected2: user.block2 });
     const [selected1, select1] = useState<number>(-1);
     const [selected2, select2] = useState<number>(-1);
+
+    useEffect(() => {
+        console.log(events);
+    });
 
     return (
         <>

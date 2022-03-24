@@ -1,4 +1,4 @@
-const Userlist = ({ users, onExport }: { users: { name: string; email: string; class: string }[]; onExport: () => void }) => {
+const Userlist = ({ users, filename }: { filename: string; users: { name: string; email: string; class: string }[] }) => {
     return (
         <div className='mt-5 px-5 md:px-10 py-5 rounded-lg border border-zinc-200 dark:border-zinc-700 dark:bg-back-highlight'>
             <div className='text-2xl mb-5'>Jelentkezők</div>
@@ -29,12 +29,27 @@ const Userlist = ({ users, onExport }: { users: { name: string; email: string; c
                 )}
             </div>
             <div className='mt-5'>
-                <button onClick={onExport} className='p-2 rounded-md bg-green-600 hover:bg-green-500 text-white'>
+                <a
+                    download={`${filename}.csv`}
+                    className='p-2 rounded-md bg-green-600 hover:bg-green-500 text-white'
+                    href={`data:text/csv;charset=utf-8,%EF%BB%BF${users
+                        .map((x) => {
+                            return `${x.name.includes(',') ? `"${x.name}"` : x.name},${x.email.includes(',') ? `"${x.email}"` : x.email},${x.class}`;
+                        })
+                        .join('\n')}`}
+                >
                     Exportálás mint CSV
-                </button>
+                </a>
             </div>
         </div>
     );
 };
+
+/* 
+                <button onClick={onExport} className='p-2 rounded-md bg-green-600 hover:bg-green-500 text-white'>
+                    Exportálás mint CSV
+                </button>
+
+*/
 
 export default Userlist;

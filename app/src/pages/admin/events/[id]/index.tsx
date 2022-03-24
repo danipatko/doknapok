@@ -8,7 +8,6 @@ import { withEvent, withUser } from '../../../../lib/server/database/redis';
 import { redirectToRoot } from '../../../../lib/server/types';
 import { settings } from '../../../../lib/server/util';
 import { getUser } from '../../../../lib/server/google-api/token';
-import ExportCSV from '../../../../lib/components/admin/ExportCSV';
 import ConfirmRM from '../../../../lib/components/admin/ConfirmRM';
 import Userlist from '../../../../lib/components/admin/UserList';
 import Head from 'next/head';
@@ -67,7 +66,6 @@ const AdminEvent = ({
     block1: { start: string; end: string };
     block2: { start: string; end: string };
 }) => {
-    const [exportShown, showExport] = useState<boolean>(false);
     const [removeShown, showRemove] = useState<boolean>(false);
 
     const remove = async (id: string): Promise<void> => {
@@ -94,7 +92,6 @@ const AdminEvent = ({
             <Head>
                 <title>{event.title} - Szerkesztés</title>
             </Head>
-            <ExportCSV id={event.id} onExit={() => showExport(false)} shown={exportShown} />
             <ConfirmRM id={event.id} onExit={() => showRemove(false)} shown={removeShown} onRemove={remove} />
             <div className='p-5'>
                 <Link href='/admin'>
@@ -106,7 +103,7 @@ const AdminEvent = ({
             <div className='flex justify-center min-h-[80vh] pb-20 items-center'>
                 <div>
                     <EventEditor onRemove={() => showRemove(true)} block1={block1} block2={block2} mode='edit' values={event} />
-                    <Userlist users={users} onExport={() => showExport(true)} />
+                    <Userlist users={users} filename={event.title} />
                 </div>
             </div>
         </>

@@ -24,11 +24,6 @@ const Event = ({
                 </div>
             </div>
             <div className='flex items-center gap-2'>
-                <div title='Exportálás CSV fájlként' onClick={() => onExport(data.id)}>
-                    <div className='text-green-500 rounded-sm hover:dark:bg-zinc-700 hover:bg-zinc-200 text-lg py-1 px-3'>
-                        <i className='fa-solid fa-file-csv'></i>
-                    </div>
-                </div>
                 <Link href={`/admin/events/${data.id}`} passHref>
                     <div title='Szerkesztés' className='text-fore rounded-sm hover:dark:bg-zinc-700 hover:bg-zinc-200 text-lg py-1 px-2'>
                         <i className='fa-solid fa-pen'></i>
@@ -43,5 +38,11 @@ const Event = ({
         </div>
     );
 };
-
+/* 
+<div title='Exportálás CSV fájlként' onClick={() => onExport(data.id)}>
+                    <div className='text-green-500 rounded-sm hover:dark:bg-zinc-700 hover:bg-zinc-200 text-lg py-1 px-3'>
+                        <i className='fa-solid fa-file-csv'></i>
+                    </div>
+                </div>
+*/
 export default Event;
