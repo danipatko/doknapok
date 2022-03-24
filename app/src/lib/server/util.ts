@@ -39,7 +39,12 @@ export const isWhite = (background: string): boolean => {
  * Should contain all utility settings
  */
 class Settings {
+    private init: boolean = false;
+
     constructor() {
+        if (this.init) return;
+        this.init = true;
+
         // read static settings.json
         this.preset = JSON.parse(fs.readFileSync('settings.json').toString()) as {
             deadline: number;
