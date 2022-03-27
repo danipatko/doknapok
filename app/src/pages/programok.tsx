@@ -4,19 +4,29 @@ import Deadline from '../lib/components/shared/Deadline';
 import Layout from '../lib/components/user/Layout';
 import Event from '../lib/components/user/Event';
 import Navitem from '../lib/components/shared/Navitem';
-import { settings } from '../lib/server/util';
+import { Settings } from '../lib/server/util';
 import { NextPageContext } from 'next';
 import { IEvent, redirectToRoot } from '../lib/server/types';
 import { getUser } from '../lib/server/google-api/token';
 import { withEvent } from '../lib/server/database/redis';
 import { useEvents } from '../lib/hooks/blocks';
 import { login } from '../lib/server/env';
+import Link from 'next/link';
 
 export async function getServerSideProps(ctx: NextPageContext) {
     if (!(ctx.req && ctx.res)) return redirectToRoot;
 
     // check logged in
-    const user = await getUser(ctx.req, ctx.res, 'any');
+    const user = /*{
+        entityData: {
+            name: '',
+            email: '',
+            class: '',
+            picture: '/favicon.ico',
+            block1: 1,
+            block2: '',
+        },
+    };*/ await getUser(ctx.req, ctx.res, 'any');
     if (!user)
         return {
             redirect: {
@@ -35,7 +45,7 @@ export async function getServerSideProps(ctx: NextPageContext) {
                 block1: user.entityData.block1 ?? null,
                 block2: user.entityData.block2 ?? null,
             },
-            deadline: settings.preset.deadline,
+            deadline: Settings.getInstance().getDeadline(),
             events: await withEvent(async (repo): Promise<any> => {
                 await repo.createIndex();
                 return {
@@ -47,8 +57,8 @@ export async function getServerSideProps(ctx: NextPageContext) {
                     }),
                 };
             }),
-            block1: settings.preset.block1,
-            block2: settings.preset.block2,
+            block1: Settings.getInstance().preset.block1,
+            block2: Settings.getInstance().preset.block2,
         },
     };
 }
@@ -86,6 +96,11 @@ const Programok = ({
             <Head>
                 <title>Programok - Dök napok</title>
             </Head>
+            <Link href='/?noredirect=1'>
+                <a className='fixed bottom-0 text-lg right-0 m-5 bg-fore hover:bg-fore-highlight rounded-full text-white'>
+                    <i className='fa fa-house p-4'></i>
+                </a>
+            </Link>
             <Deadline time={deadline} />
             <div className='text-center text-sm md:text-base lg:text-lg l p-2 md:p-4 lg:p-5'>
                 {eventData.selected1?.length && eventData.selected2?.length
@@ -126,8 +141,6 @@ const Programok = ({
                                         onEnroll={enroll}
                                         onCancel={unenroll}
                                         selected={eventData.selected1}
-                                        onClick={() => select1(i)}
-                                        extended={selected1 == i}
                                         key={i}
                                         data={x}
                                     />
@@ -141,8 +154,6 @@ const Programok = ({
                                         onEnroll={enroll}
                                         onCancel={unenroll}
                                         selected={eventData.selected2}
-                                        onClick={() => select2(i)}
-                                        extended={selected2 == i}
                                         key={i}
                                         data={x}
                                     />

@@ -6,7 +6,7 @@ import Layout from '../../../../lib/components/admin/Layout';
 import EventEditor from '../../../../lib/components/admin/EventEditor';
 import { withEvent, withUser } from '../../../../lib/server/database/redis';
 import { redirectToRoot } from '../../../../lib/server/types';
-import { settings } from '../../../../lib/server/util';
+import { Settings } from '../../../../lib/server/util';
 import { getUser } from '../../../../lib/server/google-api/token';
 import ConfirmRM from '../../../../lib/components/admin/ConfirmRM';
 import Userlist from '../../../../lib/components/admin/UserList';
@@ -39,8 +39,8 @@ export async function getServerSideProps(context: NextPageContext) {
                 });
             }),
             // simple settings
-            block1: settings.preset.block1,
-            block2: settings.preset.block2,
+            block1: Settings.getInstance().preset.block1,
+            block2: Settings.getInstance().preset.block2,
         },
     };
 }

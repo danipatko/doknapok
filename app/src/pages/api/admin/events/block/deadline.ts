@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { settings } from '../../../../../lib/server/util';
+import { Settings } from '../../../../../lib/server/util';
 import { getUser } from '../../../../../lib/server/google-api/token';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -14,12 +14,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return;
     }
 
-    const { deadline } = JSON.parse(req.body);
-    if (!deadline) {
+    const { date, time } = JSON.parse(req.body);
+    if (!(date && time)) {
         res.status(400).send('missing field deadline in request body');
         return;
     }
 
-    settings.setDeadline(deadline);
+    Settings.getInstance().setDeadline(date, time);
     res.status(200).json({ ok: true });
 }

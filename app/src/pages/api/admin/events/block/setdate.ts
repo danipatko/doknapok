@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { settings } from '../../../../../lib/server/util';
+import { Settings } from '../../../../../lib/server/util';
 import { getUser } from '../../../../../lib/server/google-api/token';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -20,8 +20,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return;
     }
 
-    if (block) settings.setBlock1Time(start, end);
-    else settings.setBlock2Time(start, end);
+    if (block) Settings.getInstance().setBlock1Time(start, end);
+    else Settings.getInstance().setBlock2Time(start, end);
 
     res.status(200).json({ ok: true });
 }

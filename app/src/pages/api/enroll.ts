@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { exists, withEvent, withUser } from '../../lib/server/database/redis';
 import { getUser } from '../../lib/server/google-api/token';
-import { settings } from '../../lib/server/util';
+import { Settings } from '../../lib/server/util';
 
 export default async function updateUserEvent(req: NextApiRequest, res: NextApiResponse) {
     if (req.method != 'POST') {
@@ -22,7 +22,7 @@ export default async function updateUserEvent(req: NextApiRequest, res: NextApiR
     }
 
     // check deadline
-    if (Date.now() > settings.preset.deadline) {
+    if (Date.now() > Settings.getInstance().getDeadline()) {
         res.json({ error: `A jelentkezés véget ért.` });
         return;
     }
@@ -55,5 +55,5 @@ export default async function updateUserEvent(req: NextApiRequest, res: NextApiR
         await repo.save(user);
     });
 
-    res.status(200).json({ ok: true });
+    res.status(200).json({ ok: true, occupied: occ + 1 });
 }

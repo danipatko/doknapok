@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { eventNames } from 'process';
 import { withEvent, withUser } from '../../lib/server/database/redis';
 import { getUser } from '../../lib/server/google-api/token';
-import { settings } from '../../lib/server/util';
+import { Settings } from '../../lib/server/util';
 
 export default async function updateUserEvent(req: NextApiRequest, res: NextApiResponse) {
     if (req.method != 'POST') {
@@ -25,23 +25,23 @@ export default async function updateUserEvent(req: NextApiRequest, res: NextApiR
     }
 
     // check deadline
-    if (Date.now() >= settings.preset.deadline) {
+    if (Date.now() >= Settings.getInstance().getDeadline()) {
         res.json({ error: `A jelentkezés véget ért.` });
         return;
     }
 
-    if (
-        await withEvent(async (repo) => {
-            const evt = await repo.fetch(id);
-            // does not exist
-            if (!Object.keys(evt.entityData).length) return true;
-            // decrement occupied
-            const occ = await withUser((repo) => repo.search().where('block1').eq(id).or('block2').eq(id).count());
-            evt.entityData.occupied = occ - 1;
-            await repo.save(evt);
-            return false;
-        })
-    ) {
+    const { occ, exists } = await withEvent(async (repo) => {
+        const evt = await repo.fetch(id);
+        // does not exist
+        if (!Object.keys(evt.entityData).length) return { occ: 0, exists: false };
+        // decrement occupied
+        const occ = await withUser((repo) => repo.search().where('block1').eq(id).or('block2').eq(id).count());
+        evt.entityData.occupied = occ - 1;
+        await repo.save(evt);
+        return { occ: occ - 1, exists: true };
+    });
+
+    if (!exists) {
         res.json({ error: `Program nem található` });
         return;
     }
@@ -54,5 +54,5 @@ export default async function updateUserEvent(req: NextApiRequest, res: NextApiR
         await repo.save(user);
     });
 
-    res.status(200).json({ ok: true });
+    res.status(200).json({ ok: true, occupied: occ });
 }

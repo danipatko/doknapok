@@ -5,7 +5,7 @@ import { withUser } from '../../lib/server/database/redis';
 import { ReactElement, useState } from 'react';
 import Layout from '../../lib/components/admin/Layout';
 import Head from 'next/head';
-import { settings } from '../../lib/server/util';
+import { Settings } from '../../lib/server/util';
 import Events from '../../lib/components/admin/Events';
 import { useEvents } from '../../lib/hooks/admin-events';
 import Navitem from '../../lib/components/shared/Navitem';
@@ -44,15 +44,23 @@ export async function getServerSideProps(ctx: NextPageContext) {
         };
     });
 
-    return { props: { stats, user: admin.entityData, deadline: settings.preset.deadline } };
+    return { props: { stats, user: admin.entityData, deadline: Settings.getInstance().preset.deadline } };
 }
 
-const DashBoard = ({ stats, user, deadline }: { stats: { userCount: number; doneCount: number; dates: number[] }; user: User; deadline: number }) => {
+const DashBoard = ({
+    stats,
+    user,
+    deadline,
+}: {
+    stats: { userCount: number; doneCount: number; dates: number[] };
+    user: User;
+    deadline: { date: string; time: string };
+}) => {
     const [shown, message, ok, alrt, setShown] = usePopup({ hideafter: 4000 });
     const [selected, select] = useState<number>(0);
     const [block1, openB1, updateB1, removeB1] = useEvents(true); // first block
     const [block2, openB2, updateB2, removeB2] = useEvents(false); // second one
-    const [dl, setDeadline] = useDeadline(deadline, alrt);
+    const [dl, setDeadline] = useDeadline(deadline.date, deadline.time, alrt);
 
     const sel = (index: number) => {
         if (index == 1) openB1();

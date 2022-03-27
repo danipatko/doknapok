@@ -38,16 +38,45 @@ export const isWhite = (background: string): boolean => {
 /**
  * Should contain all utility settings
  */
-class Settings {
-    private init: boolean = false;
+export class Settings {
+    static instance: Settings;
 
-    constructor() {
-        if (this.init) return;
-        this.init = true;
+    public preset: {
+        deadline: {
+            date: string;
+            time: string;
+        };
+        block1: {
+            start: string;
+            end: string;
+        };
+        block2: {
+            start: string;
+            end: string;
+        };
+    } = {
+        deadline: {
+            date: '',
+            time: '',
+        },
+        block1: {
+            start: '',
+            end: '',
+        },
+        block2: {
+            start: '',
+            end: '',
+        },
+    };
 
+    private constructor() {
         // read static settings.json
+        console.log('Settings constructor called');
         this.preset = JSON.parse(fs.readFileSync('settings.json').toString()) as {
-            deadline: number;
+            deadline: {
+                date: string;
+                time: string;
+            };
             block1: {
                 start: string;
                 end: string;
@@ -59,27 +88,10 @@ class Settings {
         };
     }
 
-    public preset: {
-        deadline: number;
-        block1: {
-            start: string;
-            end: string;
-        };
-        block2: {
-            start: string;
-            end: string;
-        };
-    } = {
-        deadline: 0,
-        block1: {
-            start: '',
-            end: '',
-        },
-        block2: {
-            start: '',
-            end: '',
-        },
-    };
+    static getInstance() {
+        if (!this.instance) Settings.instance = new Settings();
+        return Settings.instance;
+    }
 
     protected saveSettings(): void {
         fs.writeFileSync('settings.json', JSON.stringify(this.preset));
@@ -95,12 +107,12 @@ class Settings {
         this.saveSettings();
     }
 
-    public setDeadline(deadline: number): void {
-        // cannot set deadline backwards
-        this.preset.deadline = deadline;
+    public getDeadline(): number {
+        return new Date(`${this.preset.deadline.date} ${this.preset.deadline.time}`).getTime();
+    }
+
+    public setDeadline(date: string, time: string): void {
+        this.preset.deadline = { date, time };
         this.saveSettings();
     }
 }
-
-// export instance of settings
-export const settings = new Settings();

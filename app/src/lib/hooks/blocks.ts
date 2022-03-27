@@ -69,11 +69,18 @@ export const useEvents = (data: {
                 return;
             }
             // deadline expired
-            const { ok, error } = await res.json();
+            const { ok, error, occupied } = await res.json();
             setState((s) => {
-                if (!ok) s.error = error;
-                else if (block) s.selected1 = id;
-                else s.selected2 = id;
+                if (!ok || occupied === undefined) s.error = error;
+                else if (block) {
+                    s.selected1 = id;
+                    const obj = s.events.block1.find((x) => x.id === id);
+                    if (obj) obj.occupied = occupied;
+                } else {
+                    s.selected2 = id;
+                    const obj = s.events.block2.find((x) => x.id === id);
+                    if (obj) obj.occupied = occupied;
+                }
 
                 return { ...s, ongoing: false };
             });
@@ -97,11 +104,18 @@ export const useEvents = (data: {
                 return;
             }
             // deadline expired
-            const { ok, error } = await res.json();
+            const { ok, error, occupied } = await res.json();
             setState((s) => {
-                if (!ok) s.error = error;
-                else if (block) s.selected1 = '';
-                else s.selected2 = '';
+                if (!ok || occupied === undefined) s.error = error;
+                else if (block) {
+                    s.selected1 = '';
+                    const obj = s.events.block1.find((x) => x.id === id);
+                    if (obj) obj.occupied = occupied;
+                } else {
+                    s.selected2 = '';
+                    const obj = s.events.block2.find((x) => x.id === id);
+                    if (obj) obj.occupied = occupied;
+                }
 
                 return { ...s, ongoing: false };
             });

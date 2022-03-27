@@ -4,7 +4,7 @@ import { ReactElement, useState } from 'react';
 import Layout from '../../../lib/components/admin/Layout';
 import EventEditor from '../../../lib/components/admin/EventEditor';
 import { redirectToRoot } from '../../../lib/server/types';
-import { settings } from '../../../lib/server/util';
+import { Settings } from '../../../lib/server/util';
 import { getUser } from '../../../lib/server/google-api/token';
 import Head from 'next/head';
 
@@ -14,7 +14,7 @@ export async function getServerSideProps(context: NextPageContext) {
     const user = await getUser(context.req, context.res, 'admin');
     if (!user) return redirectToRoot;
 
-    return { props: { block1: settings.preset.block1, block2: settings.preset.block2 } };
+    return { props: { block1: Settings.getInstance().preset.block1, block2: Settings.getInstance().preset.block2 } };
 }
 
 const CreateEvent = ({ block1, block2 }: { block1: { start: string; end: string }; block2: { start: string; end: string } }) => {

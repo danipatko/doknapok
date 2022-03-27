@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import type { EntityData } from 'redis-om';
 import { withEvent } from '../../../../../lib/server/database/redis';
-import { settings } from '../../../../../lib/server/util';
+import { Settings } from '../../../../../lib/server/util';
 import { getUser } from '../../../../../lib/server/google-api/token';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -45,7 +45,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                         color: x.entityData.color,
                     };
                 }),
-                date: block == '0' ? settings.preset.block1 : settings.preset.block2,
+                date: block == '0' ? Settings.getInstance().preset.block1 : Settings.getInstance().preset.block2,
             };
         })
     );
