@@ -32,17 +32,16 @@ const Home = ({ deadline }: { deadline: number }) => {
             <Deadline time={deadline} />
             <div className='mt-2.5 md:mt-5 lg:mt-10 flex justify-center items-center'>
                 <div className='md:w-[80vw] lg:w-[70vw] xl:w-[50vw] p-5 md:p-0'>
-                    <h1 className='text-xl md:text-2xl'>Kedves Tanuló!</h1>
+                    <h1 className='text-xl md:text-2xl'>Kedves Diákok!</h1>
                     <section className='my-5 md:my-10 text-base md:text-lg'>
-                        Ezen az oldalon kell jelentkezz a DÖK napon rendezett előadásokra! Az oldalra úgy tudsz belépni, hogy az alábbi bejelentkezés
-                        gombon bejelentkezel az szlg-s email címeddel. A főoldalon fölül látni fogod a két időpontot amikor az előadások meg lesznek
-                        tartva.
-                    </section>
-                    <section className='my-5 md:my-10 text-base md:text-lg'>
-                        Az előadásoknál látni fogod, a címét, hogy ki tartja, hol lesz megrendezve, és a maximális férőhelyek közül hány van már
-                        betelve. Érdemes nem sokat várni a jelentkezésekkel, hiszen ha egy előadásra minden hely betelt, több diák már nem tud rá
-                        jelentkezni. A férőhelyek alatt látni fogsz egy nyilat, arra kattintva megjelenik az előadás leírása is, és a jelentkezés
-                        gomb. Kérlek jelentkezz mindkét időpontból egy-egy előadásra. Ha ezel kész vagy, nincs több teendőd.
+                        Április 13-án, a DÖK napon tanítás nélküli munkanap lesz. 2 blokkban kötelezően választható előadások lesznek, amikre itt
+                        tudsz jelentkezni. A bejelentkezés gombra kattintva az szlgbp.hu-s email címeddel tudsz belépni. A főoldalon fölül látni fogod
+                        a két idősávot, mindkettőben egy-egy foglalkozást (lehet előadás vagy workshop) kell választanod. A eseményeknél feltűntettük
+                        a címet, az előadó nevét, a helyszínt és azt, hogy hány hely foglalt a maximális férőhelyek közül. Érdemes mihamarabb
+                        választani, hiszen ha egy előadásra minden hely betelt, az már nem választható. Az előadás részletesebb leírása is egy
+                        kattintással elérhető. Kérünk, jelentkezz mindkét blokkból egy-egy foglalkozásra. Ha ezzel kész vagy, nincs több teendőd.
+                        Utólagos módosításra is van lehetőség, amíg az adott program még nem teltházas, vagy véget nem ér a regisztráció, azaz április
+                        11-én 22:00-ig.
                     </section>
                     <div className='mt-10 md:mt-15 lg:mt-20 text-center'>
                         <Link href='/programok'>
